@@ -7,7 +7,7 @@ const api=axios.create({
 
 export const register=(async(username,email,password)=>
 {
-    const response=await api.post('/auth/api/register',{
+    const response=await api.post('/api/auth/register',{
         username,
         email,
         password
@@ -17,7 +17,7 @@ export const register=(async(username,email,password)=>
 
 export const login=(async(identifier,password)=>
 {
-    const response=await api.post('/auth/api/login',{
+    const response=await api.post('/api/auth/login',{
         identifier,
         password
     })
@@ -26,6 +26,6 @@ export const login=(async(identifier,password)=>
 
 export const getUser=(async()=>
 {
-    const response=await api.get('/auth/api/getUser')
+    const response=await api.get('/api/auth/getUser')
     return response.data
 })
