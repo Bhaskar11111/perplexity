@@ -5,8 +5,10 @@ const authMiddleware=require('../middleware/auth.middleware')
 
 router.post('/message',authMiddleware.authUser,chatController.sendMessage)
 
-router.get('/',authMiddleware.authUser,chatController.getChats)
+router.get('/',authMiddleware.authUser,chatController.getChat)
 
-router.get('/messages/:chatId',chatController.getMessages)
+router.get('/messages/:chatId',authMiddleware.authUser,chatController.getMessages)
+
+router.delete('/:chatId',authMiddleware.authUser,chatController.deleteChat)
 
 module.exports=router
