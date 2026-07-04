@@ -1,6 +1,7 @@
 import React from "react";
 import { Check, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router";
+import PixelBlast from "./Bits/ASCII";
 
 const BrandLogo = () => (
   <span className="grid size-8 grid-cols-2 gap-0.5 rounded-lg bg-white/12 p-1 ring-1 ring-white/15 backdrop-blur">
@@ -10,6 +11,8 @@ const BrandLogo = () => (
     <span className="rounded-sm bg-white/80" />
   </span>
 );
+
+const backgroundColor = [0.5, 0.6, 0.8];
 
 const AuthCard = ({
   mode,
@@ -25,8 +28,36 @@ const AuthCard = ({
   const isRegister = mode === "register";
 
   return (
-    <div className="min-h-screen bg-[#716a82] px-3 py-4 font-light text-white sm:px-6 sm:py-8">
-      <div className="flex min-h-[calc(100vh-2rem)] items-center justify-center sm:min-h-[calc(100vh-4rem)]">
+    <div className="relative min-h-dvh overflow-hidden bg-black/40 font-light text-white">
+      <div className="fixed left-0 top-0 z-0 h-dvh w-dvw">
+        <PixelBlast
+          variant="triangle"
+          pixelSize={7}
+          color="#702cb3"
+          patternScale={2}
+          patternDensity={1.45}
+          pixelSizeJitter={0}
+          enableRipples
+          rippleSpeed={.7}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquidStrength={0.12}
+          liquid
+          liquidRadius={1.2}
+          liquidWobbleSpeed={1}
+          speed={0.3}
+          edgeFade={0}
+          transparent
+          className="h-dvh w-dvw"
+          style={{ width: "100dvw", height: "100dvh" }}
+        />
+      </div>  
+
+      <div className="relative z-20">
+      <div className="flex min-h-screen items-center justify-center px-3 py-4 sm:px-6 sm:py-8">
+
+
+
         <section className="grid w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#251f31] p-1 shadow-[0_28px_80px_rgba(18,12,28,0.45)] sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
           <aside className="relative min-h-[245px] overflow-hidden rounded-[24px] bg-[#161220] p-5 sm:min-h-[320px] lg:min-h-[520px]">
             <img
@@ -38,6 +69,7 @@ const AuthCard = ({
 
             <div className="relative z-10 flex h-full flex-col justify-between">
               <div>
+              
                 <Link
                   to="/"
                   className="inline-flex items-center gap-1 justify-center text-lg font-normal tracking-normal"
@@ -65,7 +97,11 @@ const AuthCard = ({
             </div>
           </aside>
 
+
           <main className="flex min-h-[410px] items-center justify-center px-6 py-9 sm:min-h-[440px] sm:px-10 lg:min-h-[520px]">
+            <div className="absolute">
+              
+            </div>
             <div className="w-full max-w-sm">
               <h1 className="text-[1.85rem] font-light tracking-normal text-white/82 sm:text-3xl">
                 {title}
@@ -142,6 +178,7 @@ const AuthCard = ({
           </main>
         </section>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { useChat } from '../hooks/useChat'
 import { useEffect } from 'react'
+import Sidebar from '../components/Sidebar'
+import ChatWindow from '../components/ChatWindow'
 
 const Dashboard = () => {
   
@@ -11,12 +12,16 @@ const Dashboard = () => {
   {
     chat.initializeSocketConnection()
   },[])
-    const user=useSelector((state)=>state.auth.user)
-    console.log(user)
 
 
   return (
-    <div>Dashboard</div>
+    <>
+    <div className="flex min-h-screen w-full">
+      <Sidebar/>
+      <ChatWindow/>
+      
+      </div>
+    </>
   )
 }
 

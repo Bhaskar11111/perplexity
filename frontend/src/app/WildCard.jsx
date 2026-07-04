@@ -1,14 +1,40 @@
 import React from "react";
-import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+import PixelBlast from "../features/auth/components/Bits/ASCII";
+
 
 const WildCard = () => {
 
     const navigate=useNavigate()
 
   return (
-    <div className="min-h-screen bg-[#716a82] px-3 py-4 font-light text-white sm:px-6 sm:py-8">
-      <div className="flex min-h-[calc(100vh-2rem)] items-center justify-center sm:min-h-[calc(100vh-4rem)]">
+    <div className="relative min-h-dvh overflow-hidden bg-black font-light text-white">
+      <div className="fixed left-0 top-0 z-0 h-dvh w-dvw">
+        <PixelBlast
+          variant="triangle"
+          pixelSize={7}
+          color="#702cb3"
+          patternScale={2}
+          patternDensity={1.45}
+          pixelSizeJitter={0}
+          enableRipples
+          rippleSpeed={.7}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquidStrength={0.12}
+          liquid
+          liquidRadius={1.2}
+          liquidWobbleSpeed={1}
+          speed={0.3}
+          edgeFade={0}
+          transparent
+          className="h-dvh w-dvw"
+          style={{ width: "100dvw", height: "100dvh" }}
+        />
+      </div>
+
+      <div className="relative z-20 flex min-h-dvh items-center justify-center px-3 py-4 sm:px-6 sm:py-8">
+        
         <section className="grid w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#251f31] p-1 shadow-[0_28px_80px_rgba(18,12,28,0.45)] sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
 
           {/* Left Side */}
@@ -20,6 +46,7 @@ const WildCard = () => {
             />
 
             <div className="absolute inset-0 bg-gradient-to-b from-[#6d50df]/20 via-black/5 to-[#090713]/82" />
+
 
             <div className="relative z-10 flex h-full flex-col justify-between">
               <div className="inline-flex items-center gap-1 text-lg font-normal tracking-normal">
@@ -44,6 +71,7 @@ const WildCard = () => {
               </div>
             </div>
           </aside>
+          
 
           {/* Right Side */}
           <main className="flex min-h-[410px] items-center justify-center px-6 py-9 sm:min-h-[440px] sm:px-10 lg:min-h-[520px]">
@@ -73,6 +101,7 @@ const WildCard = () => {
                   Sign up
                 </span></Link>
               </p>
+
 
             </div>
           </main>
