@@ -53,33 +53,39 @@ const AuthCard = ({
         />
       </div>  
 
-      <div className="relative z-20">
-      <div className="flex min-h-screen items-center justify-center px-3 py-4 sm:px-6 sm:py-8">
+      <div className="relative z-20 ">
+      <div className="flex min-h-screen items-center justify-center px-3 py-4 sm:px-6 sm:py-8 ">
 
 
 
-        <section className="grid w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#251f31] p-1 shadow-[0_28px_80px_rgba(18,12,28,0.45)] sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
+        <section className="grid w-full max-w-md overflow-hidden rounded-[28px] border border-white/10 bg-[#251f31]/10 p-1 
+      bg-gradient-to-br
+from-black/[0.08]
+to-black/[0.03]
+backdrop-blur-[3px]
+shadow-[0_35px_80px_rgba(0,0,0,0.55),0_12px_30px_rgba(124,58,237,0.2),0_0_60px_rgba(167,139,250,0.12)]  sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
           <aside className="relative min-h-[245px] overflow-hidden rounded-[24px] bg-[#161220] p-5 sm:min-h-[320px] lg:min-h-[520px]">
             <img
               src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
               alt="Dusk landscape"
               className="absolute inset-0 h-full w-full object-cover opacity-85"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#6d50df]/20 via-black/5 to-[#090713]/82" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#6d50df]/20 via-black/10 to-[#090713]" />
 
             <div className="relative z-10 flex h-full flex-col justify-between">
               <div>
               
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1 justify-center text-lg font-normal tracking-normal"
+                  className="inline-flex items-center gap-2 justify-center text-lg font-normal tracking-normal"
                 >
-                  <i className="text-2xl ri-perplexity-fill"></i>
-                  <span>Perplexity</span>
+                    <i class="text-2xl font-thin">ξ</i>
+                  <span className="font-thin tracking-[0]">Etos</span>
                 </Link>
               </div>
 
-              <div className="max-w-[260px] pb-2 sm:pb-5 lg:mx-auto lg:pb-8 lg:text-center">
+              <div className="">
+                <div className="max-w-[260px] pb-2 sm:pb-5 lg:mx-auto lg:pb-8 lg:text-center">
                 <h2 className="text-2xl font-light leading-tight sm:text-3xl lg:text-xl">
                   Create Ideas,
                   <br />
@@ -93,6 +99,7 @@ const AuthCard = ({
                 
                 </p>
             
+              </div>
               </div>
             </div>
           </aside>

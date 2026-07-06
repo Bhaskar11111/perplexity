@@ -1,7 +1,17 @@
 import React from "react";
 import Message from "./Message";
+import { useSelector } from "react-redux";
 
-const ChatWindow = () => {
+
+const ChatWindow = ({messages}) => {
+
+
+  const {chats,currentChatId}=useSelector((state)=>state.chat.chats )
+
+  const state = useSelector((state) => state);
+
+  console.log(state);
+
   return (
     <main className="flex h-screen  flex-1 flex-col bg-[#111]">
 
@@ -17,84 +27,24 @@ const ChatWindow = () => {
         
       </header>
 
-      <section className="flex-1  overflow-y-auto px-20 py-7">
-        <div className="mx-auto flex max-w-3xl flex-col gap-6">
-          <Message
-            role="user"
-            content="What is Artificial Intelligence?"
-            time="10:42 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Artificial Intelligence (AI) refers to computer systems that can perform tasks usually associated with human reasoning, such as understanding language, recognizing patterns, making predictions, and solving problems."
-            time="10:42 AM"
-          />
-
-          <Message
-            role="user"
-            content="Can you give me some examples?"
-            time="10:43 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Common examples include search ranking, fraud detection, voice assistants, recommendation systems, medical image analysis, and tools that summarize or draft text."
-            time="10:43 AM"
-          />
-          <Message
-            role="user"
-            content="What is Artificial Intelligence?"
-            time="10:42 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Artificial Intelligence (AI) refers to computer systems that can perform tasks usually associated with human reasoning, such as understanding language, recognizing patterns, making predictions, and solving problems."
-            time="10:42 AM"
-          />
-
-          <Message
-            role="user"
-            content="Can you give me some examples?"
-            time="10:43 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Common examples include search ranking, fraud detection, voice assistants, recommendation systems, medical image analysis, and tools that summarize or draft text."
-            time="10:43 AM"
-          />
-          <Message
-            role="user"
-            content=">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, tempora natus sit rem qui in illum eligendi et delectus fugiat corrupti asperiores praesentium cupiditate sunt aliquid ipsum recusandae explicabo consequuntur iusto voluptas incidunt omnis. Corrupti dolorem, repellat, laboriosam ratione voluptatem quae incidunt non dicta distinctio laudantium quod quo odit cum neque pariatur eos impedit nisi! Maxime quis eius natus quos? Recusandae distinctio dignissimos blanditiis aut accusamus ipsa. Ad laborum natus fugit maxime velit iusto laudantium. Pariatur quos mollitia nisi iusto illum animi minus libero nam ab dolorem. Fugit exercitationem ea recusandae laudantium veritatis quis, sed voluptates officiis explicabo odio porro."
-            time="10:42 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Artificial Intelligence (AI) refers to computer systems that can perform tasks usually associated with human reasoning, such as understanding language, recognizing patterns, making predictions, and solving problems. >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque, tempora natus sit rem qui in illum eligendi et delectus fugiat corrupti asperiores praesentium cupiditate sunt aliquid ipsum recusandae explicabo consequuntur iusto voluptas incidunt omnis. Corrupti dolorem, repellat, laboriosam ratione voluptatem quae incidunt non dicta distinctio laudantium quod quo odit cum neque pariatur eos impedit nisi! Maxime quis eius natus quos? Recusandae distinctio dignissimos blanditiis aut accusamus ipsa. Ad laborum natus fugit maxime velit iusto laudantium. Pariatur quos mollitia nisi iusto illum animi minus libero nam ab dolorem. Fugit exercitationem ea recusandae laudantium veritatis quis, sed voluptates officiis explicabo odio porro."
-            time="10:42 AM"
-          />
-
-          <Message
-            role="user"
-            content="Can you give me some examples?"
-            time="10:43 AM"
-          />
-
-          <Message
-            role="ai"
-            content="Common examples include search ranking, fraud detection, voice assistants, recommendation systems, medical image analysis, and tools that summarize or draft text."
-            time="10:43 AM"
-          />
-        </div>
+      <section className="flex-1  overflow-y-auto px-55 py-7">
+        
+        {chats?.[currentChatId]?.messages.map((elem,indx)=>
+        {
+          return (<div className="">
+            <Message
+            key={indx}
+            role={elem.role}
+            content={elem.content}
+            />
+          </div>)
+        })}
       </section>
 
 
       <div className="px-10 flex items-center justify-center">
 
-        <div className="flex items-center w-[53vw] rounded-full border border-white/10 bg-neutral-800 h-fit p-1 backdrop-blur-xl px-5 focus-within:border-[#7b5be6]/60">
+        <div className="flex items-center w-[56vw] rounded-full border border-white/10 bg-neutral-800 h-fit p-1 backdrop-blur-xl px-5 focus-within:border-[#7b5be6]/60">
   <div className="flex items-center w-full justify-between">
     <textarea
     rows={1}
@@ -115,7 +65,7 @@ const ChatWindow = () => {
         </div>
 
         <p className="mt-3 text-center mb-1 text-xs text-white/34">
-          Perplexity by Bhaskar can make mistakes. Check important information.
+          Etos by Bhaskar can make mistakes. Check important information.
         </p>
 
     </main>

@@ -16,9 +16,9 @@ const Sidebar = () => {
       <div className="px-5 py-5">
         <div className="flex items-center gap-1 text-white">
           <div className="grid h-8 w-8 place-items-center rounded-md text-2xl">
-            <i className="ri-perplexity-fill "></i>
+            <i className="text-2xl font-thin">ξ</i>
           </div>
-          <span className="text-xl font-thin tracking-[0]">Perplexity</span>
+          <span className="text-xl font-thin tracking-[0]">Etos</span>
           
         </div>
       </div>

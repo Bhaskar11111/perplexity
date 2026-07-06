@@ -8,7 +8,8 @@ const Message = ({ role = "ai", content, time }) => {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
 
       {!isUser && (
-        <div className="mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-900">
+        <div className="mt-2 flex h-10 w-1
+        0 shrink-0 items-center justify-center rounded-full bg-neutral-900">
           <i className="ri-perplexity-fill text-xl text-white"></i>
         </div>
       )}
@@ -17,7 +18,7 @@ const Message = ({ role = "ai", content, time }) => {
   className={` ${
     isUser
       ? "mr-3 bg-[#30283d]/30 max-w-[30vw]"
-      : "ml-3"
+      : "ml-3 max-w-[60vw]"
   } min-w-0 overflow-hidden flex items-center justify-center ${
     isLongMessage ? "rounded-xl px-5 py-4" : "rounded-full px-4 py-2"
   }`}
