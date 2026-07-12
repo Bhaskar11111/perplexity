@@ -5,7 +5,7 @@ const userModel=require('../model/user.model')
 
 const sendMessage=(async(req,res)=>{
     {
-        const {message, chat:chatId}=req.body
+        const {message, chatId}=req.body
            
         
         let chat, title;
@@ -24,7 +24,17 @@ const sendMessage=(async(req,res)=>{
         })
         }
         else {
-            chat = await chatModel.findById(chatId)
+            chat = await chatModel.findOne({
+                _id:chatId,
+                user:req.user.id
+            })
+        }
+
+        if(!chat)
+        {
+            return res.status(404).json({
+                message:'Chat not found'
+            })
         }
         
         const userMessage=await messageModel.create({
@@ -48,6 +58,9 @@ const sendMessage=(async(req,res)=>{
             role:"ai"
         })
 
+        chat.updatedAt=new Date()
+        await chat.save()
+
 
         return res.status(201).json({
             title,
@@ -59,13 +72,13 @@ const sendMessage=(async(req,res)=>{
 
 const getChat=(async(req,res)=>
 {
-    const chat=await chatModel.find({
+    const chats=await chatModel.find({
         user:req.user.id
-    })
+    }).sort({updatedAt:-1, _id:-1})
 
     return res.status(200).json({
-        message:'Chat retrieved successfully',
-        chat
+        message:'Chats retrieved successfully',
+        chats
     })
 })
 
@@ -73,7 +86,7 @@ const getMessages=(async(req,res)=>
 {
     const {chatId}=req.params
 
-    const chat=await chatModel.find({
+    const chat=await chatModel.findOne({
         user:req.user.id,
         _id:chatId
     })

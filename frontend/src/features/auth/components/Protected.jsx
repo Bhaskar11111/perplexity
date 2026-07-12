@@ -9,14 +9,14 @@ const Protected = ({children}) => {
     const loading=useSelector((state)=>state.auth.loading)
 
     if(loading){
-        return <div className="w-full h-screen flex items-center justify-center text-2xl bg-black/40 ">
+        return <div className="w-full h-screen flex items-center justify-center text-2xl  bg-black/40 font-thin ">
             <ShinyText
   text="Loading..."
   speed={1}
   delay={0.1}
-  color="#262525a7"
+  color="#6c6c6ca7"
   shineColor="#7C3AED"
-  spread={70}
+  spread={90}
   direction="left"
   yoyo={false}
   pauseOnHover={false}

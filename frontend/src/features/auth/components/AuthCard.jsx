@@ -63,7 +63,7 @@ const AuthCard = ({
 from-black/[0.08]
 to-black/[0.03]
 backdrop-blur-[3px]
-shadow-[0_35px_80px_rgba(0,0,0,0.55),0_12px_30px_rgba(124,58,237,0.2),0_0_60px_rgba(167,139,250,0.12)]  sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
+  sm:max-w-xl lg:max-w-4xl lg:grid-cols-[1.05fr_1fr]">
           <aside className="relative min-h-[245px] overflow-hidden rounded-[24px] bg-[#161220] p-5 sm:min-h-[320px] lg:min-h-[520px]">
             <img
               src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"

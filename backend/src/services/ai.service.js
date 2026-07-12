@@ -7,6 +7,7 @@ const geminiModel=new ChatMistralAI({
     model:'mistral-small-latest',
     apiKey:process.env.MISTRAL_API_KEY
 })
+console.log(process.env.GEMINI_API_KEY)
 
 const mistralModel=new ChatMistralAI({
     model:'mistral-small-latest',

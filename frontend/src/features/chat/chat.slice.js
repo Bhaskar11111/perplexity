@@ -9,6 +9,78 @@ const chatSlice=createSlice({
         error:null
     },
     reducers:{
+
+        createDraftChat:((state)=>
+        {
+            const chatId=`draft-${Date.now()}`
+
+            state.chats[chatId] = {
+                id: chatId,
+                title: "New chat",
+                messages: [],
+                lastUpdated: new Date().toISOString(),
+                isDraft: true
+            }
+            state.currentChatId = chatId
+        }),
+
+        replaceDraftChat:((state,action)=>
+        {
+            const {draftChatId, chatId, title}=action.payload
+            const draftChat=state.chats[draftChatId]
+
+            if (draftChat) {
+                delete state.chats[draftChatId]
+            }
+
+            state.chats[chatId] = {
+                id: chatId,
+                title,
+                messages: draftChat?.messages || [],
+                lastUpdated: new Date().toISOString(),
+                isDraft: false
+            }
+            state.currentChatId = chatId
+        }),
+
+        createNewChat:((state,action)=>
+        {
+            const {chatId,title}=action.payload
+            if (!state.chats[chatId]) {
+        state.chats[chatId] = {
+            id: chatId,
+            title,
+            messages: [],
+            lastUpdated: new Date().toISOString(),
+            isDraft: false
+        };
+    }
+            else {
+                state.chats[chatId].title = title
+                state.chats[chatId].isDraft = false
+                state.chats[chatId].lastUpdated = new Date().toISOString()
+            }
+        }),
+
+        addMessage:((state,action)=>
+        {
+            const {chatId,content,role}=action.payload
+            if (!state.chats[chatId]) {
+                return
+            }
+            state.chats[chatId].messages.push({content,role})
+            state.chats[chatId].lastUpdated = new Date().toISOString()
+        }),
+
+        addFollowMessages:((state,action)=>
+        {
+            const {chatId, messages}=action.payload
+            if (!state.chats[chatId]) {
+                return
+            }
+            state.chats[chatId].messages = messages
+        }),
+
         setChats:((state,action)=>
         {
             state.chats=action.payload
@@ -28,6 +100,6 @@ const chatSlice=createSlice({
     }
 })
 
-export const {setChats,setCurrentChatId,setLoading,setError}=chatSlice.actions
+export const {setChats,setCurrentChatId,setLoading,setError,createDraftChat,replaceDraftChat,createNewChat,addMessage,addFollowMessages}=chatSlice.actions
 
 export default chatSlice.reducer

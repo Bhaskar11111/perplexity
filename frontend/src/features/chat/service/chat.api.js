@@ -15,7 +15,7 @@ export const sendMessage=(async(message,chatId)=>
     return response.data
     }
     catch(err){
-        throw new Error(err)
+        throw err
     }
 })
 
@@ -27,18 +27,18 @@ export const getChats=(async()=>
         return response.data
     }
     catch(err){
-        throw new Error(err)
+        throw err
     }
 })
 
 export const getMessages=(async(chatId)=>
 {
     try{
-        const response=await api.get('/api/chats/message/:chatId')
+        const response=await api.get(`/api/chats/messages/${chatId}`)
 
         return response.data
     }
     catch(err){
-        throw new Error(err)
+        throw err
     }
 })
