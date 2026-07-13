@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   return (
     <>
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full ">
       <Sidebar selectChat={chat.handleOpenChat}/>
         <ChatWindow/>
       </div>

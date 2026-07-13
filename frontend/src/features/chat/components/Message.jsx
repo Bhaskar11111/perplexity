@@ -23,7 +23,7 @@ const Message = ({ role, content, time }) => {
   // console.log(content)
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={`flex ${isUser ? "justify-end " : "justify-start"}`}>
 
       {!isUser && (
         <div className="mt-2 w-10 h-10 flex h-10 w-1
@@ -41,7 +41,7 @@ const Message = ({ role, content, time }) => {
     isLongMessage ? "rounded-xl px-5 py-4" : "rounded-full px-4 py-2"
   }`}
 >
-  <div className="min-w-0 text-start whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-[15px] leading-7 text-white/90">
+  <div className="min-w-0  text-start whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-[15px]  leading-7 text-white/90">
   <ReactMarkdown
   remarkPlugins={[remarkGfm, 
         remarkMath, 
