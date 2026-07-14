@@ -6,8 +6,14 @@
 }
 
 *{
-  user-select: auto;
+  user-select:text;
 }
+::selection{
+  background-color: rgb(156, 178, 13);
+  color: black;
+}
+
+
 
 .logo {
   height: 6em;

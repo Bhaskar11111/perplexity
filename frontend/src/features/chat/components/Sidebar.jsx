@@ -30,7 +30,7 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
         <div className="flex justify-between items-center gap-1 text-white">
           <div className="flex items-center justify-center">
             <div className="grid h-8 w-8 place-items-center rounded-md text-2xl">
-            <i className="text-2xl font-thin">ξ</i>
+            <i className="text-2xl font-thin -rotate-7">&xi;</i>
           </div>
           <span className="text-xl font-thin tracking-[0]">Etos</span>
           </div>

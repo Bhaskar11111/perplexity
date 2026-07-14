@@ -68,10 +68,12 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
 
      <div className="sticky top-0 z-50 flex h-16 items-center justify-between bg-[#30283D]/20 px-4 backdrop-blur-md sm:px-6 lg:px-8" >
 
-     <div className="flex items-center gap-3"> 
-     <i onClick={()=>setIsSideBarOpen(!isSideBarOpen)} className={`${!isSideBarOpen?'ri-layout-right-line':'ri-layout-right-fill'} text-xl font-thin text-white/60 grid h-8 w-8 place-items-center rounded-md text-white/60 transition hover:bg-[#8b6cf1] hover:text-white cursor-pointer cursor-pointer hover:text-white/80`}></i>
-     <div className="flex items-center text-white lg:hidden">
-      <span className="grid h-8 w-8 place-items-center rounded-md text-2xl font-thin">&xi;</span>
+     <div className="flex items-center w-1/2 justify-between"> 
+     <div className="">
+      <i onClick={()=>setIsSideBarOpen(!isSideBarOpen)} className={`${!isSideBarOpen?'ri-layout-left-line':'ri-layout-right-fill'} text-xl font-thin text-white/60 grid h-8 w-8 place-items-center rounded-md text-white/60 transition hover:bg-[#8b6cf1] hover:text-white cursor-pointer cursor-pointer hover:text-white/80`}></i>
+     </div>
+     <div className={`flex items-center ${isSideBarOpen?'scale-0  transition-all':'scale-100 transition-all'} text-white `}>
+      <span className="grid h-8 w-8 place-items-center rounded-md text-2xl font-thin rotate-3">&xi;</span>
       <span className="text-xl font-thin tracking-[0]">Etos</span>
      </div>
      </div>
@@ -145,7 +147,7 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
 
         
          <div className="bg-[#111] w-full h-6">
-           <p className="absolute bottom-1 left-1/2 w-full -translate-x-1/2 px-4 text-center text-[10px] text-white/34">
+           <p className={`${isSideBarOpen?'translate-y-40 transition-all duration-300':'translate-y-0 transition-all duration-300'} absolute bottom-1 left-[50%] w-full -translate-x-1/2 px-4 text-center text-[10px] text-white/34`}>
           Etos by Bhaskar can make mistakes. Check important information.
         </p>
          </div>

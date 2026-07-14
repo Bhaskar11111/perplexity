@@ -16,6 +16,12 @@ body {
   display: none;
 }
 
+*::selection {
+  user-select: text;
+  background: rgb(103, 62, 103);
+  color: gainsboro;
+}
+
 .markdown-body li > p {
   margin-bottom: 0;
 }

@@ -95,7 +95,7 @@ const Message = ({ role, content, time }) => {
       {!isUser && (
         <div className="mt-2 w-10 h-10 flex h-10 w-1
         0 shrink-0 items-center justify-center rounded-full bg-[#18161A]">
-          <p className=" text-xl text-white/70 rotate-7 font-thin">ξ</p>
+          <p className=" text-xl text-white/70  font-thin">ξ</p>
         </div>
       )}
 

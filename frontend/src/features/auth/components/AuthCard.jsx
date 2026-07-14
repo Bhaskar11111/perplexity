@@ -79,7 +79,7 @@ backdrop-blur-[3px]
                   to="/"
                   className="inline-flex items-center gap-2 justify-center text-lg font-normal tracking-normal"
                 >
-                    <i class="text-2xl font-thin">ξ</i>
+                    <i class="text-2xl font-thin -rotate-7">ξ</i>
                   <span className="font-thin tracking-[0]">Etos</span>
                 </Link>
               </div>
