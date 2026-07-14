@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createDraftChat, setCurrentChatId } from "../chat.slice";
 
-const Sidebar = ({selectChat}) => {
+const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
+
 
   const [isBlock, setIsBlock] = useState(false)
 
@@ -10,7 +11,12 @@ const Sidebar = ({selectChat}) => {
 
   const openChat=((chatId)=>
   {
-    selectChat(chatId)
+    if (selectChat) {
+      selectChat(chatId)
+    }
+    if (window.innerWidth < 1024) {
+      setIsOpen(false)
+    }
   })
 
   const chats=useSelector((state)=>Object.values(state.chat.chats))
@@ -18,15 +24,23 @@ const Sidebar = ({selectChat}) => {
   const currentChatId=useSelector((state)=>state.chat.currentChatId)
 
   return (
-    <aside className="w-[292px] h-screen bg-neutral-900 border-r border-white/8 flex flex-col">
+    <aside className={`fixed inset-y-0 left-0 z-[60] flex h-screen w-[82vw] max-w-[292px] shrink-0 flex-col overflow-hidden bg-neutral-900  transition-all duration-300 lg:relative lg:max-w-none ${isOpen?'translate-x-0 border-r border-white/8 lg:w-[19vw]':'-translate-x-full border-r-0 lg:w-0'}`}>
 
       <div className="px-5 py-5">
-        <div className="flex items-center gap-1 text-white">
-          <div className="grid h-8 w-8 place-items-center rounded-md text-2xl">
+        <div className="flex justify-between items-center gap-1 text-white">
+          <div className="flex items-center justify-center">
+            <div className="grid h-8 w-8 place-items-center rounded-md text-2xl">
             <i className="text-2xl font-thin">ξ</i>
           </div>
           <span className="text-xl font-thin tracking-[0]">Etos</span>
-          
+          </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="grid h-8 w-8 place-items-center rounded-md text-white/60 transition hover:bg-[#8b6cf1]hover:text-white cursor-pointer lg:hidden"
+            type="button"
+          >
+            <i className="ri-layout-right-fill text-xl "></i>
+          </button>
         </div>
       </div>
    
@@ -52,6 +66,9 @@ const Sidebar = ({selectChat}) => {
               onClick={()=>{
                 if (elem.isDraft) {
                   dispatch(setCurrentChatId(elem.id))
+                  if (window.innerWidth < 1024) {
+                    setIsOpen(false)
+                  }
                   return
                 }
 
@@ -97,7 +114,7 @@ const Sidebar = ({selectChat}) => {
           
           <div
   className={`
-    absolute bottom-[10vh] left-[14vw] z-50
+    absolute lg:bottom-[11.2vh] bottom-[9vh] right-[2vw] lg:left-[3vw] z-50
     w-56 overflow-hidden
     rounded-2xl
     border border-white/10
@@ -105,7 +122,7 @@ const Sidebar = ({selectChat}) => {
     backdrop-blur-xl
     shadow-[0_20px_60px_rgba(0,0,0,0.55)]
     transition-all duration-200
-    origin-bottom-left
+    origin-bottom-right
     ${
       isBlock
         ? "scale-100 opacity-100 translate-y-0"
@@ -114,7 +131,7 @@ const Sidebar = ({selectChat}) => {
   `}
 >
   <button
-    className="group flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
+    className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
   >
     <i className="ri-information-line text-lg text-white/60 group-hover:text-white"></i>
 
@@ -123,10 +140,10 @@ const Sidebar = ({selectChat}) => {
     </span>
   </button>
 
-  <div className="mx-3 h-px bg-white/10" />
+  <div className="mx-3  h-[.1px] bg-white/10" />
 
   <button
-    className="group flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
+    className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
   >
     <i className="ri-settings-3-line text-lg text-white/60 group-hover:text-white"></i>
 
@@ -135,10 +152,10 @@ const Sidebar = ({selectChat}) => {
     </span>
   </button>
 
-  <div className="mx-3 h-px bg-white/10" />
+  <div className="mx-3 h-[.1px] bg-white/10" />
 
   <button
-    className="group flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-red-500/10"
+    className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-red-500/10"
   >
     <i className="ri-logout-box-r-line text-lg text-red-400"></i>
 

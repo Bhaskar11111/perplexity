@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createDraftChat, setChats, setCurrentChatId } from "../chat.slice";
 import {useChat} from '../hooks/useChat.js'
 
-const ChatWindow = () => {
+const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
 
   const welcomeMessgaes=[
       "What's on the Agenda Today?","Hello! I'm Etos. How can I help you today?",
@@ -21,12 +21,12 @@ const ChatWindow = () => {
 
     
   
-    const random=(Math.floor(Math.random()*welcomeMessgaes.length))
-  
+  const random=(Math.floor(Math.random()*welcomeMessgaes.length))
+
   const [message, setMessage] = useState("")
   const textareaRef = useRef(null)
 
-  const isLongeInput=message.includes("\n")
+  const isLongeInput=message.includes("\n")||message.length>40
   
   const chats=useSelector((state)=>state.chat.chats)
   const  currentChatId = useSelector((state) => state.chat.currentChatId)
@@ -64,9 +64,19 @@ const ChatWindow = () => {
     })
     
   return (
-    <main className="flex h-screen relative flex-1 flex-col bg-[#111]">
+    <main className="flex h-screen min-w-0 flex-1 flex-col bg-[#111]">
 
-     <div className="sticky  top-0 z-50 flex  h-16 items-center justify-between bg-[#30283D]/20 backdrop-blur-md px-8">
+     <div className="sticky top-0 z-50 flex h-16 items-center justify-between bg-[#30283D]/20 px-4 backdrop-blur-md sm:px-6 lg:px-8" >
+
+     <div className="flex items-center gap-3"> 
+     <i onClick={()=>setIsSideBarOpen(!isSideBarOpen)} className={`${!isSideBarOpen?'ri-layout-right-line':'ri-layout-right-fill'} text-xl font-thin text-white/60 grid h-8 w-8 place-items-center rounded-md text-white/60 transition hover:bg-[#8b6cf1] hover:text-white cursor-pointer cursor-pointer hover:text-white/80`}></i>
+     <div className="flex items-center text-white lg:hidden">
+      <span className="grid h-8 w-8 place-items-center rounded-md text-2xl font-thin">&xi;</span>
+      <span className="text-xl font-thin tracking-[0]">Etos</span>
+     </div>
+     </div>
+  
+     
       <header>
       
         <div className="">
@@ -80,10 +90,10 @@ const ChatWindow = () => {
      </div>
       
 
-      <section className="flex-1 overflow-y-auto px-55 py-15 ">
+      <section className="relative flex-1 overflow-y-auto px-4 py-20 pb-32 sm:px-8 md:px-16 lg:px-32 xl:px-55">
         
-        {!currentChatId || currentChat.messages.length===0?<div className="">
-          <h1 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-thin leading-none text-xl text-white/60 w-full text-center ">{welcomeMessgaes[random]}</h1>
+        {!currentChatId || currentChat?.messages.length===0?<div className="">
+          <h1 className="absolute left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 text-center text-xl font-thin leading-snug text-white/60 sm:w-full sm:leading-none">{welcomeMessgaes[random]}</h1>
         </div>:chats[currentChatId]?.messages.map((elem,indx)=>
         {
           return (<div className="">
@@ -96,13 +106,13 @@ const ChatWindow = () => {
         })}
       </section>
 
-      <div className=" flex flex-col items-center justify-center">
+      <div className=" flex flex-col items-center justify-center ">
 
         
-        <div className={`flex w-[56vw] ${!isLongeInput?'rounded-full':'rounded-[20px]'} border absolute bottom-6 border-white/10 h-fit  
-backdrop-blur-md px-4 py-[6px]  focus-within:border-[#7b5be6]/60`}>
+        <div className={`absolute bottom-6 flex h-fit w-[calc(100%-2rem)] max-w-4xl sm:w-[80vw] lg:w-[56vw] ${!isLongeInput?'rounded-full':'rounded-[20px]'} border border-white/10  
+       backdrop-blur-sm px-4 py-[6px]  focus-within:border-[#7b5be6]/60`}>
   <form onSubmit={handleSubmit} className="w-full"> 
-    <div className="flex min-h-9 w-full items-center justify-between gap-2">
+    <div className="flex min-h-9 items-center justify-between ">
     <textarea
     ref={textareaRef}
     value={message}
@@ -117,10 +127,10 @@ backdrop-blur-md px-4 py-[6px]  focus-within:border-[#7b5be6]/60`}>
     }}
     rows={1}
     placeholder="Ask Etos..."
-    className="max-h-48 min-h-5 flex-1 resize-none bg-transparent relative py-1.5 text-[14px] leading-5 text-white outline-none placeholder:text-white/35"
+    className="max-h-48 min-h-5 flex-1 resize-none  overflow-hidden relative  text-[14px] leading-5 text-white outline-none placeholder:text-white/35"
 />          
 
-            <button type="submit" className={`group  ${isLongeInput?'absolute bottom-2 right-2':'relative'} flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg text-white transition-all duration-300 hover:bg-[#8b6cf1] cursor-pointer`}>
+            <button type="submit" className={`group  ${isLongeInput?'absolute bottom-2 right-2':'relative'} absolute right-0 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg text-white transition-all duration-300 hover:bg-[#8b6cf1] cursor-pointer`}>
 
   <i className="ri-send-ins-line text-2xl absolute transition-all duration-200 group-hover:scale-0 group-hover:opacity-0"></i>
 
@@ -135,7 +145,7 @@ backdrop-blur-md px-4 py-[6px]  focus-within:border-[#7b5be6]/60`}>
 
         
          <div className="bg-[#111] w-full h-6">
-           <p className="  absolute bottom-1 text-center  left-1/2 -translate-x-1/2  text-[10px] text-white/34">
+           <p className="absolute bottom-1 left-1/2 w-full -translate-x-1/2 px-4 text-center text-[10px] text-white/34">
           Etos by Bhaskar can make mistakes. Check important information.
         </p>
          </div>
