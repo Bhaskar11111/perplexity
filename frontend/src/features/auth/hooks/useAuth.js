@@ -1,6 +1,7 @@
 import {register,login,getUser} from '../service/auth.api.js'
 import { setUser,setLoading, setError } from '../auth.slice.js'
 import { useDispatch } from 'react-redux'
+import { clearChats } from '../../chat/chat.slice.js'
 
 
 const useAuth=(()=>
@@ -12,10 +13,13 @@ const useAuth=(()=>
     try{
         dispatch(setLoading(true))
         const data=await register(username,email,password)
-        dispatch(setUser(data.user))
+        dispatch(setUser(null))
+        dispatch(clearChats())
         return data
     }
     catch(err){
+        dispatch(setUser(null))
+        dispatch(clearChats())
         dispatch(setError(err.response?.data?.message || "Registration failed"))
         throw err
     }
@@ -33,9 +37,10 @@ const handleLogin=(async(identifier,password)=>
         return data
     }
     catch(err){
+        dispatch(setUser(null))
+        dispatch(clearChats())
         dispatch(setError(err.response?.data?.message || "Login failed"))
         throw err
-        // dispatch(setUser(null))
     }
     finally{
         dispatch(setLoading(false))
@@ -50,7 +55,9 @@ const handleGetUser=(async()=>
         dispatch(setUser(data.user))
     }
     catch(err){
-        dispatch(setError(err.response?.data.message) || "Something went wrong")
+        dispatch(setUser(null))
+        dispatch(clearChats())
+        dispatch(setError(err.response?.data?.message || "Something went wrong"))
     }
     finally{
         dispatch(setLoading(false))

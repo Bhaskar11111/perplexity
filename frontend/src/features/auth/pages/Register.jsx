@@ -54,8 +54,8 @@ const Register = () => {
     
     try{
       await handleRegister(formData.username,formData.email,formData.password)
-      showToast("Account created", "success", {id:toastId})
-      navigate('/')
+      showToast("Account created. Please verify your email before logging in.", "success", {id:toastId})
+      navigate('/login')
     }
     catch(err){
       showToast(getAuthErrorMessage(err), "error", {id:toastId})

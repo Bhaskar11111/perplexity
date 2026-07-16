@@ -2,21 +2,57 @@ require('dotenv').config()
 const {ChatGoogleGenerativeAI}=require('@langchain/google-genai')
 const {ChatMistralAI}=require('@langchain/mistralai')
 const {HumanMessage,SystemMessage,AIMessage}=require('@langchain/core/messages')
+const {tool}=require('@langchain/core/tools')
+const{createAgent}=require('langchain')
+const {z}=require('zod')
+const serachInternet = require('./internet.service')
+const sendEmail = require('./mail.service')
 
-const geminiModel=new ChatMistralAI({
+const chatMistralModel=new ChatMistralAI({
     model:'mistral-small-latest',
     apiKey:process.env.MISTRAL_API_KEY
 })
-console.log(process.env.GEMINI_API_KEY)
 
-const mistralModel=new ChatMistralAI({
+const titleMistralModel=new ChatMistralAI({
     model:'mistral-small-latest',
     apiKey:process.env.MISTRAL_API_KEY
+})
+
+const serachInternetTool=tool(
+    serachInternet,
+    {
+        name:"searchInternet",
+        description:"Use this tool to get the latest information from the internet.",
+        schema:z.object({
+            query:z.string().describe("The search query to look up on the internet")
+        })
+    }
+)
+
+const sendEmailTool=tool(
+    sendEmail,
+    {
+        name:"sendEmailtool",
+        description:"This tool can send personalized emails",
+        schema:z.object({
+            to:z.string().describe("This is the recipient's email"),
+
+            subject:z.string().describe("It contains the subject of an email"),
+
+            html:z.string().describe("The main body of an email")
+        })
+    }
+)
+
+const agent=createAgent({
+    model:chatMistralModel,
+    tools:[serachInternetTool,sendEmailTool]
 })
 
 const generateResponse=(async(allMessages)=>
 {
-    const response=await geminiModel.invoke(allMessages.map((elem)=>
+    const response=await agent.invoke({
+        messages:allMessages.map((elem)=>
     {
         if(elem.role==="user"){
             return new HumanMessage(elem.content)
@@ -24,14 +60,15 @@ const generateResponse=(async(allMessages)=>
         else if(elem.role==="ai"){
             return new AIMessage(elem.content)
         }
-    }))
-console.log(typeof allMessages);
-    return (await response).content
+    }).filter(Boolean)
+    })
+
+    return response.messages[response.messages.length-1].content
 })
 
 const generateTitle=(async(message)=>
 {
-    const title=await mistralModel.invoke([
+    const title=await titleMistralModel.invoke([
         new SystemMessage(`You are a chat title generator.
 
 Your task is to generate a concise, descriptive title based ONLY on the user's first message.

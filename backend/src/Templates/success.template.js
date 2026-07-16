@@ -97,7 +97,7 @@ const emailVerificationSuccess = () => `
         color:#9ca3af;
         font-size:13px;
     ">
-        © 2026 Perplexity by Bhaskar
+        © 2026 Etos by Bhaskar
     </div>
 
 </div>

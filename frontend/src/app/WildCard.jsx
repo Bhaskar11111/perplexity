@@ -50,8 +50,8 @@ const WildCard = () => {
 
             <div className="relative z-10 flex h-full flex-col justify-between">
               <div className="inline-flex items-center gap-1 text-lg font-normal tracking-normal">
-                <i className="text-2xl ri-perplexity-fill"></i>
-                <span>Perplexity</span>
+                <i className="text-2xl mr-1 -rotate-7 font-thin">&xi;</i>
+                <span>Etos</span>
               </div>
 
               <div className="max-w-[260px] pb-2 sm:pb-5 lg:mx-auto lg:pb-8 lg:text-center">

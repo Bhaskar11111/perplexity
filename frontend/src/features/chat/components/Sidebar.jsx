@@ -97,7 +97,7 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
         <button className="flex w-full items-center gap-3 rounded-md p-2 text-left transition ">
 
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7b5be6] text-md font-semibold text-white">
-            {(auth.username[0]).toUpperCase()}
+            {(auth.username[1]).toUpperCase()}
           </div>
 
           <div className="min-w-0 flex-1">

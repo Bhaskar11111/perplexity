@@ -121,6 +121,7 @@ export const useChat=(()=>
 
             const formattedMessages=messages.map((elem)=>
             ({
+                id:elem._id,
                 content:elem.content,
                 role:elem.role,
                 shouldAnimate:false,

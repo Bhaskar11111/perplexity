@@ -17,7 +17,7 @@ const welcomeEmailTemplate = (username,emailVerificationToken) => `
                     <tr>
                         <td style="padding:24px 32px;border-bottom:1px solid #f3f4f6;">
                             <div style="font-size:18px;font-weight:600;color:#111827;">
-                                Perplexity by Bhaskar
+                                Etos by Bhaskar
                             </div>
                         </td>
                     </tr>
@@ -30,7 +30,7 @@ const welcomeEmailTemplate = (username,emailVerificationToken) => `
                             </p>
 
                             <p style="margin:0 0 16px;color:#4b5563;font-size:15px;line-height:1.8;">
-                                Welcome to <strong>Perplexity by Bhaskar</strong>.
+                                Welcome to <strong>Etos by Bhaskar</strong>.
                                 Your account has been successfully created and is ready to use.
                             </p>
 
@@ -44,7 +44,7 @@ const welcomeEmailTemplate = (username,emailVerificationToken) => `
 
                             <a href='http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}'
 
-                            style=" background:#111827; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; display:inline-block; font-size:14px; font-weight:600; " > Verify Email </a>
+                            style=" background:#8B6CF1; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; display:inline-block; font-size:14px; font-weight:400; " > Verify Email </a>
 
                         </td>
                     </tr>

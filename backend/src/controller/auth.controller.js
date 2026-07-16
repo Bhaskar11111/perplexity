@@ -40,7 +40,7 @@ const registerController=(async(req,res,next)=>
 
     await sendEmail({
         to:email,
-        subject:"Welcome to Perplexity by Bhaskar",
+        subject:"Welcome to Etos by Bhaskar",
         html:welcomeEmailTemplate(username,emailVerificationToken)
     })
 
@@ -107,6 +107,7 @@ const loginController=(async(req,res,next)=>
 
     if(!user)
     {
+        res.clearCookie('token')
         return res.status(400).json({
             message:'Unauthorize access',
             success:false,
@@ -114,10 +115,11 @@ const loginController=(async(req,res,next)=>
         })
     }
 
-    const hash=bcrypt.compare(password,user.password)
+    const hash=await bcrypt.compare(password,user.password)
 
     if(!hash)
     {
+        res.clearCookie('token')
         return res.status(400).json({
             message:'Invalid credentials',
             success:false,
@@ -127,6 +129,7 @@ const loginController=(async(req,res,next)=>
 
     if(!user.verified)
     {
+        res.clearCookie('token')
         return res.status(400).json({
             message:'Email is not verified. Please verify your email first',
             success:false,

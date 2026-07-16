@@ -22,12 +22,15 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
   const [message, setMessage] = useState("")
   const textareaRef = useRef(null)
   const messagesEndRef = useRef(null)
+  const previousChatIdRef = useRef(null)
 
   const isLongeInput=message.includes("\n")||message.length>40
   
   const chats=useSelector((state)=>state.chat.chats)
+  const auth=useSelector((state)=>state.auth.user)
   const currentChatId = useSelector((state) => state.chat.currentChatId)
   const currentChat = chats[currentChatId];
+  const userInitial=(auth?.username?.[0] || auth?.identifier?.[0] || "U").toUpperCase()
   
   const {handleSendMessage}=useChat()
 
@@ -48,8 +51,14 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
       return
     }
 
+    const chatChanged=previousChatIdRef.current !== currentChatId
+    previousChatIdRef.current = currentChatId
+
     requestAnimationFrame(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+      messagesEndRef.current?.scrollIntoView({
+        behavior: chatChanged ? "auto" : "smooth",
+        block: "end"
+      })
     })
   }, [currentChatId, currentChat?.messages.length])
   
@@ -102,12 +111,15 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
           <h1 className="absolute left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 text-center text-xl font-thin leading-snug text-white/60 sm:w-full sm:leading-none">{welcomeMessage}</h1>
         </div>:chats[currentChatId]?.messages.map((elem,indx)=>
         {
-          return (<div key={indx} className="">
+          const isNearBottom=indx >= chats[currentChatId].messages.length - 8
+          return (<div key={elem.id || `${elem.role}-${indx}`} className="">
             <Message
             role={elem.role}
             content={elem.content}
             shouldAnimate={elem.shouldAnimate}
             isPending={elem.isPending}
+            userInitial={userInitial}
+            eagerRender={isNearBottom}
             />
           </div>)
         })}

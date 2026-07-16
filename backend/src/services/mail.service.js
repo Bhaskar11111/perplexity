@@ -26,15 +26,16 @@ transporter.verify()
 
 
 const sendEmail=(async({to,from,subject,text,html})=>
-{
+{   
+
     const mailOptions={
         from:process.env.GOOGLE_USER,
         to,
+        // replyTo:,
         subject,
         text,
         html
     }
-
     try{
         const details=await transporter.sendMail(mailOptions)
 
