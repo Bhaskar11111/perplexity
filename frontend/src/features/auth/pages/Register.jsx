@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import AuthCard from "../components/AuthCard";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { useToast } from "../../../app/Toast";
+import { getAuthErrorMessage } from "../utils/getAuthErrorMessage";
 
 const fields = [
   {
@@ -26,6 +28,7 @@ const fields = [
 
 const Register = () => {
   const {handleRegister}=useAuth()
+  const {showToast}=useToast()
   const navigate=useNavigate()
 
   const [showPassword, setShowPassword] = useState(false);
@@ -47,15 +50,17 @@ const Register = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData);
+    const toastId=showToast("Signing up...", "loading")
     
-    // try{
-    //   await handleRegister(formData.username,formData.email,formData.password,formData.agree)
-    //   navigate('/')
-    // }
-    // catch(err){
-    //   console.error(err)
-    // }
+    try{
+      await handleRegister(formData.username,formData.email,formData.password)
+      showToast("Account created", "success", {id:toastId})
+      navigate('/')
+    }
+    catch(err){
+      showToast(getAuthErrorMessage(err), "error", {id:toastId})
+      console.error(err)
+    }
   };
 
   return (

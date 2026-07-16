@@ -13,9 +13,11 @@ const useAuth=(()=>
         dispatch(setLoading(true))
         const data=await register(username,email,password)
         dispatch(setUser(data.user))
+        return data
     }
     catch(err){
         dispatch(setError(err.response?.data?.message || "Registration failed"))
+        throw err
     }
     finally{
         dispatch(setLoading(false))
@@ -28,9 +30,10 @@ const handleLogin=(async(identifier,password)=>
         dispatch(setLoading(true))
         const data=await login(identifier,password)
         dispatch(setUser(data.user))
+        return data
     }
     catch(err){
-        dispatch(setError(err.response?.data?. message || "Login failed"))
+        dispatch(setError(err.response?.data?.message || "Login failed"))
         throw err
         // dispatch(setUser(null))
     }

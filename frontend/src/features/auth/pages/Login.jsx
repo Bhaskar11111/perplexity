@@ -3,6 +3,8 @@ import AuthCard from "../components/AuthCard";
 import useAuth from '../hooks/useAuth.js'
 import { Navigate, useNavigate } from "react-router";
 import { useSelector } from "react-redux";
+import { useToast } from "../../../app/Toast";
+import { getAuthErrorMessage } from "../utils/getAuthErrorMessage";
 
 const fields = [
   {
@@ -25,6 +27,7 @@ const Login = () => {
   const loading=useSelector((state)=>state.auth.loading)
 
   const {handleLogin}=useAuth()
+  const {showToast}=useToast()
   const navigate=useNavigate()
 
   const [showPassword, setShowPassword] = useState(false);
@@ -43,12 +46,15 @@ const Login = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // console.log(formData);
+    const toastId=showToast("Logging in...", "loading")
 
     try{
       await handleLogin(formData.identifier,formData.password)
-    navigate('/')
+      showToast("Successfully logged in", "success", {id:toastId})
+      navigate('/')
   }
   catch(err){
+    showToast(getAuthErrorMessage(err), "error", {id:toastId})
     console.error(err)
   }
 

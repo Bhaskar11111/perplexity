@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 //remark plugins
@@ -13,9 +13,38 @@ import rehypeSlug from 'rehype-slug'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeKatex from 'rehype-katex'
+import { useSelector } from "react-redux";
 
-const Message = ({ role, content, time }) => {
+const Message = ({ role, content, time, shouldAnimate = false, isPending = false }) => {
+
+  const auth=useSelector((state)=>state.auth.user)
+
   const isUser = role === "user";
+  const shouldTypewrite = !isUser && shouldAnimate;
+  const [displayedText, setDisplayedText] = useState(shouldTypewrite ? "" : content);
+
+useEffect(() => {
+  if (!content) return;
+  if (!shouldTypewrite) {
+    setDisplayedText(content);
+    return;
+  }
+
+  let index = 0;
+  const charactersPerTick = content.length > 1200 ? 18 : content.length > 500 ? 12 : 7;
+
+  const interval = setInterval(() => {
+    index = Math.min(index + charactersPerTick, content.length);
+    setDisplayedText(content.slice(0, index));
+
+    if (index >= content.length) {
+      clearInterval(interval);
+    }
+  }, 12);
+
+  return () => clearInterval(interval);
+}, [content, shouldTypewrite]);
+
   const isLongMessage = content.length > 80 || content.includes("\n") || content.includes(<br/>);
   const markdownComponents = {
     h1: ({ children }) => <h1 className="mb-4 mt-6 border-b border-white/10 pb-2 text-2xl font-semibold leading-9 text-white first:mt-0">{children}</h1>,
@@ -108,7 +137,9 @@ const Message = ({ role, content, time }) => {
     isLongMessage ? "rounded-xl px-5 py-4" : "lg:rounded-full md:rounded-full rounded-full px-4 py-2"
   }`}
 >
-  <div className="markdown-body min-w-0 text-start break-words [overflow-wrap:anywhere] text-[15px] leading-7 text-white/90">
+  <div className={`markdown-body min-w-0 text-start break-words [overflow-wrap:anywhere] text-[15px] leading-7 ${
+    isPending ? "pending-message-text" : "text-white/90"
+  }`}>
   <ReactMarkdown
   remarkPlugins={[
     remarkGfm,
@@ -125,7 +156,7 @@ const Message = ({ role, content, time }) => {
   ]}
   components={markdownComponents}
 >
-  {content}
+  {displayedText}
 </ReactMarkdown>
 
   </div>
@@ -133,8 +164,8 @@ const Message = ({ role, content, time }) => {
       </div>
 
       {isUser && (
-        <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#7b5be6] text-[11px] font-semibold text-white">
-          BM
+        <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#7b5be6] text-md  font-semibold text-white">
+          {(auth.username[0]).toUpperCase()}
         </div>
       )}
 

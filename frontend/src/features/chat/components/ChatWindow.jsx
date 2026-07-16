@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message";
-import { useDispatch, useSelector } from "react-redux";
-import { createDraftChat, setChats, setCurrentChatId } from "../chat.slice";
+import { useSelector } from "react-redux";
 import {useChat} from '../hooks/useChat.js'
 
 const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
@@ -19,21 +18,16 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
   "Hey! Etos here. What are we working on right now?"
     ]
 
-    
-  
-  const random=(Math.floor(Math.random()*welcomeMessgaes.length))
-
+  const [welcomeMessage] = useState(() => welcomeMessgaes[Math.floor(Math.random()*welcomeMessgaes.length)])
   const [message, setMessage] = useState("")
   const textareaRef = useRef(null)
+  const messagesEndRef = useRef(null)
 
   const isLongeInput=message.includes("\n")||message.length>40
   
   const chats=useSelector((state)=>state.chat.chats)
-  const  currentChatId = useSelector((state) => state.chat.currentChatId)
-
-  
+  const currentChatId = useSelector((state) => state.chat.currentChatId)
   const currentChat = chats[currentChatId];
-  console.log(currentChat)
   
   const {handleSendMessage}=useChat()
 
@@ -48,6 +42,16 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
     textarea.style.height = `${Math.min(textarea.scrollHeight, 192)}px`
     textarea.style.overflowY = textarea.scrollHeight > 192 ? "auto" : "hidden"
   }, [message])
+
+  useEffect(() => {
+    if (!currentChatId || !currentChat?.messages.length) {
+      return
+    }
+
+    requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+    })
+  }, [currentChatId, currentChat?.messages.length])
   
   const handleSubmit=(async(e)=>
     {
@@ -58,8 +62,8 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
       if(!trimmedMessage) {
         return
       }
-      await handleSendMessage(trimmedMessage,currentChatId)
       setMessage('')
+      await handleSendMessage(trimmedMessage,currentChatId)
       
     })
     
@@ -72,7 +76,7 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
      <div className="">
       <i onClick={()=>setIsSideBarOpen(!isSideBarOpen)} className={`${!isSideBarOpen?'ri-layout-left-line':'ri-layout-right-fill'} text-xl font-thin text-white/60 grid h-8 w-8 place-items-center rounded-md text-white/60 transition hover:bg-[#8b6cf1] hover:text-white cursor-pointer cursor-pointer hover:text-white/80`}></i>
      </div>
-     <div className={`flex items-center ${isSideBarOpen?'scale-0  transition-all':'scale-100 transition-all'} text-white `}>
+     <div className={`md:flex lg:flex hidden  absolute left-1/2 -translate-x-1/2 items-center ${isSideBarOpen?'scale-0  transition-all':'scale-100 transition-all'} text-white `}>
       <span className="grid h-8 w-8 place-items-center rounded-md text-2xl font-thin rotate-3">&xi;</span>
       <span className="text-xl font-thin tracking-[0]">Etos</span>
      </div>
@@ -95,17 +99,19 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
       <section className="relative flex-1 overflow-y-auto px-4 py-20 pb-32 sm:px-8 md:px-16 lg:px-32 xl:px-55">
         
         {!currentChatId || currentChat?.messages.length===0?<div className="">
-          <h1 className="absolute left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 text-center text-xl font-thin leading-snug text-white/60 sm:w-full sm:leading-none">{welcomeMessgaes[random]}</h1>
+          <h1 className="absolute left-1/2 top-1/2 w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 text-center text-xl font-thin leading-snug text-white/60 sm:w-full sm:leading-none">{welcomeMessage}</h1>
         </div>:chats[currentChatId]?.messages.map((elem,indx)=>
         {
-          return (<div className="">
+          return (<div key={indx} className="">
             <Message
-            key={indx}
             role={elem.role}
             content={elem.content}
+            shouldAnimate={elem.shouldAnimate}
+            isPending={elem.isPending}
             />
           </div>)
         })}
+        <div ref={messagesEndRef} />
       </section>
 
       <div className=" flex flex-col items-center justify-center ">
@@ -147,7 +153,7 @@ const ChatWindow = ({isSideBarOpen,setIsSideBarOpen}) => {
 
         
          <div className="bg-[#111] w-full h-6">
-           <p className={`${isSideBarOpen?'translate-y-40 transition-all duration-300':'translate-y-0 transition-all duration-300'} absolute bottom-1 left-[50%] w-full -translate-x-1/2 px-4 text-center text-[10px] text-white/34`}>
+           <p className={`${isSideBarOpen?'opacity-0 transition-all duration-300':'opacity-100 transition-all duration-300'} absolute bottom-1 left-[50%] w-full -translate-x-1/2 px-4 text-center text-[10px] text-white/34`}>
           Etos by Bhaskar can make mistakes. Check important information.
         </p>
          </div>

@@ -4,6 +4,8 @@ import { createDraftChat, setCurrentChatId } from "../chat.slice";
 
 const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
 
+  const auth=useSelector((state)=>state.auth.user)
+  console.log(auth)
 
   const [isBlock, setIsBlock] = useState(false)
 
@@ -94,17 +96,17 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
       <div className="border-t border-white/8 p-4">
         <button className="flex w-full items-center gap-3 rounded-md p-2 text-left transition ">
 
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7b5be6] text-xs font-semibold text-white">
-            BM
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7b5be6] text-md font-semibold text-white">
+            {(auth.username[0]).toUpperCase()}
           </div>
 
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-sm font-medium text-white">
-              Bhaskar Mishra
+              {auth.username}
             </h3>
 
             <p className="truncate text-xs text-white/40">
-              bhaskar@gmail.com
+              {auth.email}
             </p>
           </div>
 

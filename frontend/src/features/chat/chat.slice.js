@@ -10,9 +10,9 @@ const chatSlice=createSlice({
     },
     reducers:{
 
-        createDraftChat:((state)=>
+        createDraftChat:((state,action)=>
         {
-            const chatId=`draft-${Date.now()}`
+            const chatId=action.payload?.chatId || `draft-${Date.now()}`
 
             state.chats[chatId] = {
                 id: chatId,
@@ -64,12 +64,30 @@ const chatSlice=createSlice({
 
         addMessage:((state,action)=>
         {
-            const {chatId,content,role}=action.payload
+            const {chatId,id,content,role,shouldAnimate=false,isPending=false}=action.payload
             if (!state.chats[chatId]) {
                 return
             }
-            state.chats[chatId].messages.push({content,role})
+            state.chats[chatId].messages.push({id,content,role,shouldAnimate,isPending})
             state.chats[chatId].lastUpdated = new Date().toISOString()
+        }),
+
+        updateMessage:((state,action)=>
+        {
+            const {chatId,messageId,content,role,shouldAnimate=false,isPending=false}=action.payload
+            const chat=state.chats[chatId]
+            if (!chat) {
+                return
+            }
+            const message=chat.messages.find((elem)=>elem.id===messageId)
+            if (!message) {
+                return
+            }
+            message.content=content
+            message.role=role
+            message.shouldAnimate=shouldAnimate
+            message.isPending=isPending
+            chat.lastUpdated = new Date().toISOString()
         }),
 
         addFollowMessages:((state,action)=>
@@ -100,6 +118,6 @@ const chatSlice=createSlice({
     }
 })
 
-export const {setChats,setCurrentChatId,setLoading,setError,createDraftChat,replaceDraftChat,createNewChat,addMessage,addFollowMessages}=chatSlice.actions
+export const {setChats,setCurrentChatId,setLoading,setError,createDraftChat,replaceDraftChat,createNewChat,addMessage,updateMessage,addFollowMessages}=chatSlice.actions
 
 export default chatSlice.reducer

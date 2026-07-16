@@ -1,4 +1,4 @@
-import { setChats,setCurrentChatId,setLoading,setError,createNewChat,replaceDraftChat,addMessage,addFollowMessages } from "../chat.slice"
+import { setChats,setCurrentChatId,setLoading,setError,createDraftChat,createNewChat,replaceDraftChat,addMessage,updateMessage,addFollowMessages } from "../chat.slice"
 import { sendMessage,getChats,getMessages } from "../service/chat.api"
 import { initializeSocketConnection } from "../service/socket.service"
 import { useDispatch } from 'react-redux'
@@ -9,18 +9,45 @@ export const useChat=(()=>
 
     const handleSendMessage=(async(message,chatId)=>
     {
+        const optimisticChatId=chatId || `draft-${Date.now()}`
+        const userMessageId=`user-${Date.now()}`
+        const pendingMessageId=`ai-pending-${Date.now()}`
+
         try{
             dispatch(setLoading(true))
-            const isDraftChat=chatId?.startsWith("draft-")
+            const isDraftChat=optimisticChatId.startsWith("draft-")
+
+            if (!chatId) {
+                dispatch(createDraftChat({chatId:optimisticChatId}))
+            }
+
+            dispatch(setCurrentChatId(optimisticChatId));
+
+            dispatch(addMessage({
+                chatId:optimisticChatId,
+                id:userMessageId,
+                role:"user",
+                content:message,
+                shouldAnimate:false
+            }))
+
+            dispatch(addMessage({
+                chatId:optimisticChatId,
+                id:pendingMessageId,
+                role:"ai",
+                content:"thinking...",
+                shouldAnimate:false,
+                isPending:true
+            }))
             
             // if it's not a new chat, then the chatId will remain undefined, and backend will handle it.
-            const data=await sendMessage(message,isDraftChat ? undefined : chatId) 
+            const data=await sendMessage(message,isDraftChat ? undefined : optimisticChatId) 
             const {chat,aiMessage}=data
-            const activeChatId=chat._id || chatId
+            const activeChatId=chat._id || optimisticChatId
             
             if (isDraftChat) {
                 dispatch(replaceDraftChat({
-                    draftChatId:chatId,
+                    draftChatId:optimisticChatId,
                     chatId:activeChatId,
                     title:chat.title
                 }))
@@ -34,19 +61,24 @@ export const useChat=(()=>
 
             dispatch(setCurrentChatId(activeChatId));
 
-            dispatch(addMessage({
+            dispatch(updateMessage({
                 chatId:activeChatId,
-                role:"user",
-                content:message
-            }))
-
-            dispatch(addMessage({
-                chatId:activeChatId,
+                messageId:pendingMessageId,
                 role:aiMessage.role,
                 content:aiMessage.content,
+                shouldAnimate:true,
+                isPending:false
             }))
         }
         catch(err){
+            dispatch(updateMessage({
+                chatId:optimisticChatId,
+                messageId:pendingMessageId,
+                role:"ai",
+                content:err.response?.data?.message || err.message || "Something went wrong",
+                shouldAnimate:false,
+                isPending:false
+            }))
             dispatch(setError(err.response?.data?.message || err.message))
         }
         finally{
@@ -90,7 +122,9 @@ export const useChat=(()=>
             const formattedMessages=messages.map((elem)=>
             ({
                 content:elem.content,
-                role:elem.role
+                role:elem.role,
+                shouldAnimate:false,
+                isPending:false
             }))
             dispatch(addFollowMessages({
                 chatId,
