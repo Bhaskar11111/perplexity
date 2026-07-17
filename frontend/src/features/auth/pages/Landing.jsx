@@ -8,56 +8,56 @@ const Landing=(()=>
     const homeWelcomeMessages = [
   <>
     What is the one thing you know is true, but you cannot{" "}
-    <span className="text-violet-400/70 font-medium">actually prove</span>?
+    <span className="text-violet-400/70 ">actually prove</span>?
   </>,
 
   <>
-    If your <span className="text-violet-400/70 font-medium">mind</span> had a physical{" "}
-    <span className="text-violet-400/70 font-medium">shape</span>, what would it look like
+    If your <span className="text-violet-400/70 ">mind</span> had a physical{" "}
+    <span className="text-violet-400/70 ">shape</span>, what would it look like
     right now?
   </>,
 
   <>
-    What <span className="text-violet-400/70 font-medium">question</span> are you most afraid
-    of knowing the <span className="text-violet-400/70 font-medium">absolute answer</span> to?
+    What <span className="text-violet-400/70 ">question</span> are you most afraid
+    of knowing the <span className="text-violet-400/70 ">absolute answer</span> to?
   </>,
 
   <>
-    If you could <span className="text-violet-400/70 font-medium">unlearn</span> one single
-    fact, what would you choose to <span className="text-violet-400/70 font-medium">forget</span>?
+    If you could <span className="text-violet-400/70 ">unlearn</span> one single
+    fact, what would you choose to <span className="text-violet-400/70 ">forget</span>?
   </>,
 
   <>
-    What is a <span className="text-violet-400/70 font-medium">concept</span> or idea that
-    your brain completely refuses to <span className="text-violet-400/70 font-medium">grasp</span>?
+    What is a <span className="text-violet-400/70 ">concept</span> or idea that
+    your brain completely refuses to <span className="text-violet-400/70 ">grasp</span>?
   </>,
 
   <>
-    If you could see a <span className="text-violet-400/70 font-medium">hidden metric</span>{" "}
+    If you could see a <span className="text-violet-400/70 ">hidden metric</span>{" "}
     floating above people's heads, what would it{" "}
-    <span className="text-violet-400/70 font-medium">measure</span>?
+    <span className="text-violet-400/70 ">measure</span>?
   </>,
 
   <>
-    What part of <span className="text-violet-400/70 font-medium">human behavior</span> makes
-    the least amount of <span className="text-violet-400/70 font-medium">sense</span> to you?
+    What part of <span className="text-violet-400/70 ">human behavior</span> makes
+    the least amount of <span className="text-violet-400/70 ">sense</span> to you?
   </>,
 
   <>
     If you had to explain the feeling of{" "}
-    <span className="text-violet-400/70 font-medium">nostalgia</span> to an{" "}
-    <span className="text-violet-400/70 font-medium">alien</span>, what words would you use?
+    <span className="text-violet-400/70 ">nostalgia</span> to an{" "}
+    <span className="text-violet-400/70 ">alien</span>, what words would you use?
   </>,
 
   <>
     What is something you completely took for{" "}
-    <span className="text-violet-400/70 font-medium">granted</span> until it suddenly{" "}
-    <span className="text-violet-400/70 font-medium">vanished</span>?
+    <span className="text-violet-400/70 ">granted</span> until it suddenly{" "}
+    <span className="text-violet-400/70 ">vanished</span>?
   </>,
 
   <>
-    If your current <span className="text-violet-400/70 font-medium">mood</span> was an{" "}
-    <span className="text-violet-400/70 font-medium">atmospheric sound</span>, what would it
+    If your current <span className="text-violet-400/70 ">mood</span> was an{" "}
+    <span className="text-violet-400/70 ">atmospheric sound</span>, what would it
     sound like?
   </>,
 ]
@@ -85,9 +85,9 @@ document.title='Etos | Home'
 
     return(
         
-        <main className="home-page min-h-screen relative overflow-hidden z-99 font-thin bg-[#111] text-white">
+        <main className="home-page  min-h-screen relative overflow-hidden z-99 font-thin bg-[#111] text-white">
               
-  <div className='w-full h-[100vh] -z-10 absolute'>
+  <div className='w-full h-[100vh] bg-red-200 -z-10 absolute'>
   <FaultyTerminal
     scale={1.9}
     gridMul={[2, 1]}
@@ -101,7 +101,7 @@ document.title='Etos | Home'
     chromaticAberration={0}
     dither={0}
     curvature={0.23}
-    tint="#AF72D8"
+    tint="#9A7DFF"
     mouseReact
     mouseStrength={0.2}
     pageLoadAnimation
@@ -116,16 +116,19 @@ document.title='Etos | Home'
                     <span className="text-xl font-thin tracking-[0]">Etos</span>
                 </Link>
 
-                <nav className="flex items-center gap-1">
+                <nav className="flex overflow-hidden backdrop-blur-md
+bg-white/[0.03]
+border border-white/[0.05]
+rounded-full items-center gap-1">
                     <Link
                         to="/login"
-                        className="rounded-md px-4 py-2 text-sm font-medium text-white/56 transition hover:bg-white/[0.05] hover:text-white"
+                        className="rounded-md px-4 py-2 text-sm  text-white/56 transition hover:bg-white/10 hover:text-white"
                     >
                         Login
                     </Link>
                     <Link
                         to={user ? "/dashboard" : "/register"}
-                        className="rounded-md px-4 py-2 text-sm font-medium text-white/82 transition hover:bg-white/[0.05] hover:text-white"
+                        className="rounded-md px-4 py-2 text-sm  text-white/82 transition hover:bg-white/10 hover:text-white"
                     >
                         {user ? "Open app" : "Create account"}
                     </Link>
@@ -133,29 +136,29 @@ document.title='Etos | Home'
             </header>
 
             <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-3xl flex-col items-center justify-center px-5 text-center">
-                <div className="mb-8 flex items-center justify-center">
+                {/* <div className="mb-8 flex items-center justify-center">
                     <span className="grid h-14 w-14 place-items-center rounded-xl border border-white/10 bg-[#18161A] text-5xl font-thin text-white/88 ">&xi;</span>
-                </div>
+                </div> */}
 
-                <h1 className="text-4xl font-thin leading-tight tracking-[0] uppercase text-white/80 sm:text-5xl md:text-6xl">
+                <h1 className="text-4xl font-thin leading-tight max-w-5xl mx-auto tracking-[0] uppercase text-white/80 sm:text-5xl md:text-6xl">
                 {(randomWelcome)}
                 </h1>
 
-                <p className="mt-5 max-w-xl text-[16px] leading-7 text-white/48">
-                    {(randomLogline).toUpperCase()}
+                <p className="mt-5 max-w-xl text-[16px] leading-7 text-white/58">
+                    {(randomLogline)}
                 </p>
 
                 <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
                     <Link
                         to={user ? "/dashboard" : "/register"}
-                        className="flex h-12 flex-1 items-center justify-center rounded-md bg-[#7b5be6] py-2 px-5 text-sm font-medium text-white transition hover:bg-[#8b6cf1]"
+                        className="flex h-12 flex-1 items-center justify-center rounded-xl bg-[#7b5be6] py-2 px-5 text-sm  text-white transition hover:bg-[#8b6cf1]"
                     >
                         {user ? "Continue" : "Create account"}
                     </Link>
 
                     <Link
                         to="/login"
-                        className="flex h-12 flex-1 items-center justify-center rounded-md border backdrop-blur-[5px] border-white/10 px-5 py-2 text-sm font-medium text-white/68 transition hover:border-white/18 hover:bg-white/10 hover:text-white"
+                        className="flex h-12 flex-1 items-center justify-center rounded-xl border backdrop-blur-[5px] border-white/10 px-5 py-2 text-sm  text-white/68 transition hover:border-white/18 hover:bg-white/10 hover:text-white"
                     >
                         Login
                     </Link>

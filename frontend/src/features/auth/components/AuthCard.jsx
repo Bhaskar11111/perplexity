@@ -28,12 +28,12 @@ const AuthCard = ({
   const isRegister = mode === "register";
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-black/40 font-light text-white">
+    <div className="relative min-h-dvh overflow-hidden bg-[#111] font-light text-white">
       <div className="fixed left-0 top-0 z-0 h-dvh w-dvw">
         <PixelBlast
           variant="triangle"
           pixelSize={7}
-          color="#702cb3"
+          color="#6a4fc9"
           patternScale={2}
           patternDensity={1.1}
           pixelSizeJitter={0}
@@ -138,7 +138,7 @@ backdrop-blur-[3px]
                           onChange={onChange}
                           placeholder={field.placeholder}
                           autoComplete={field.autoComplete}
-                          className={`h-12 w-full rounded-xl border border-white/12 bg-[#30283d] px-4 text-sm font-light text-white outline-none transition placeholder:text-white/34 hover:border-white/18 focus:border-[#9a7af0] focus:bg-[#342c42] focus:ring-2 focus:ring-[#9a7af0]/20 sm:h-11 ${
+                          className={`h-12 w-full rounded-xl border  border-white/12 bg-[#30283d] px-4 text-sm font-light text-white outline-none transition placeholder:text-white/34 hover:border-white/18 focus:border-[#9a7af0] focus:bg-[#342c42] focus:ring-2 focus:ring-[#9a7af0]/20 sm:h-11 ${
                             isPassword ? "pr-11" : ""
                           }`}
                         />
