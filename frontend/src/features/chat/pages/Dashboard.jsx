@@ -5,6 +5,9 @@ import Sidebar from '../components/Sidebar'
 import ChatWindow from '../components/ChatWindow'
 
 const Dashboard = () => {
+
+        document.title='Etos | Dashboard'
+
     
   const [isSideBarOpen, setIsSideBarOpen] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia("(min-width: 1024px)").matches : true

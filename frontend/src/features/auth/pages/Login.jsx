@@ -7,6 +7,7 @@ import { useToast } from "../../../app/Toast";
 import { getAuthErrorMessage } from "../utils/getAuthErrorMessage";
 
 const fields = [
+
   {
     name: "identifier",
     type: "text",
@@ -22,6 +23,8 @@ const fields = [
 ];
 
 const Login = () => {
+    document.title='Etos | Login'
+
 
   const user=useSelector((state)=>state.auth.user)
   const loading=useSelector((state)=>state.auth.loading)
@@ -51,7 +54,7 @@ const Login = () => {
     try{
       await handleLogin(formData.identifier,formData.password)
       showToast("Successfully logged in", "success", {id:toastId})
-      navigate('/')
+      navigate('/dashboard')
   }
   catch(err){
     showToast(getAuthErrorMessage(err), "error", {id:toastId})

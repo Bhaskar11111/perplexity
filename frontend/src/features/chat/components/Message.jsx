@@ -92,7 +92,7 @@ const markdownComponents = {
   td: ({ children }) => <td className="border-b border-r border-white/10 px-4 py-3 align-top text-white/85 last:border-r-0">{children}</td>,
 }
 
-const Message = ({ role, content, shouldAnimate = false, isPending = false, userInitial = "U", eagerRender = false }) => {
+const Message = ({ role, content, images = [], shouldAnimate = false, isPending = false, userInitial = "U", eagerRender = false }) => {
   const messageRef = useRef(null)
   const isUser = role === "user";
   const shouldTypewrite = !isUser && shouldAnimate;
@@ -147,7 +147,8 @@ const Message = ({ role, content, shouldAnimate = false, isPending = false, user
     return () => clearInterval(interval);
   }, [content, shouldTypewrite]);
 
-  const isLongMessage = content.length > 80 || content.includes("\n");
+  const hasImages = images.length > 0;
+  const isLongMessage = hasImages || content.length > 80 || content.includes("\n");
   const plainPreview = useMemo(() => content.replace(/[`*_#>\[\]()]/g, ""), [content])
 
   return (
@@ -170,6 +171,18 @@ const Message = ({ role, content, shouldAnimate = false, isPending = false, user
         <div className={`markdown-body min-w-0 text-start break-words [overflow-wrap:anywhere] text-[15px] leading-7 ${
           isPending ? "pending-message-text" : "text-white/90"
         }`}>
+          {images.length > 0 && (
+            <div className="mb-3 grid gap-2">
+              {images.map((image, index)=>(
+                <img
+                  key={`${image.dataUrl || image.originalName}-${index}`}
+                  src={image.dataUrl}
+                  alt={image.originalName || "Uploaded image"}
+                  className="max-h-72 max-w-full rounded-xl border border-white/10 object-contain"
+                />
+              ))}
+            </div>
+          )}
           {shouldRenderMarkdown ? (
             <ReactMarkdown
               remarkPlugins={remarkPlugins}

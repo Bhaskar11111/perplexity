@@ -1,5 +1,5 @@
-import { setChats,setCurrentChatId,setLoading,setError,createDraftChat,createNewChat,replaceDraftChat,addMessage,updateMessage,addFollowMessages } from "../chat.slice"
-import { sendMessage,getChats,getMessages } from "../service/chat.api"
+import { setChats,setCurrentChatId,setLoading,setError,createDraftChat,createNewChat,replaceDraftChat,addMessage,updateMessage,addFollowMessages,removeChat } from "../chat.slice"
+import { sendMessage,getChats,getMessages,deleteChat } from "../service/chat.api"
 import { initializeSocketConnection } from "../service/socket.service"
 import { useDispatch } from 'react-redux'
 
@@ -7,11 +7,16 @@ export const useChat=(()=>
 {
     const dispatch=useDispatch()
 
-    const handleSendMessage=(async(message,chatId)=>
+    const handleSendMessage=(async(message,chatId,image)=>
     {
         const optimisticChatId=chatId || `draft-${Date.now()}`
         const userMessageId=`user-${Date.now()}`
         const pendingMessageId=`ai-pending-${Date.now()}`
+        const imagePreview=image ? [{
+            dataUrl:URL.createObjectURL(image),
+            mimeType:image.type,
+            originalName:image.name
+        }] : []
 
         try{
             dispatch(setLoading(true))
@@ -28,6 +33,7 @@ export const useChat=(()=>
                 id:userMessageId,
                 role:"user",
                 content:message,
+                images:imagePreview,
                 shouldAnimate:false
             }))
 
@@ -35,13 +41,13 @@ export const useChat=(()=>
                 chatId:optimisticChatId,
                 id:pendingMessageId,
                 role:"ai",
-                content:"thinking...",
+                content:"Thinking...",
                 shouldAnimate:false,
                 isPending:true
             }))
             
             // if it's not a new chat, then the chatId will remain undefined, and backend will handle it.
-            const data=await sendMessage(message,isDraftChat ? undefined : optimisticChatId) 
+            const data=await sendMessage(message,isDraftChat ? undefined : optimisticChatId,image) 
             const {chat,aiMessage}=data
             const activeChatId=chat._id || optimisticChatId
             
@@ -124,6 +130,7 @@ export const useChat=(()=>
                 id:elem._id,
                 content:elem.content,
                 role:elem.role,
+                images:elem.images || [],
                 shouldAnimate:false,
                 isPending:false
             }))
@@ -142,10 +149,32 @@ export const useChat=(()=>
         }
     })
 
+    const handleDeleteChat=(async(chatId)=>
+    {
+        try {
+            dispatch(setLoading(true))
+
+            if(!chatId.startsWith("draft-"))
+            {
+                await deleteChat(chatId)
+            }
+
+            dispatch(removeChat(chatId))
+        }
+        catch(err) {
+            dispatch(setError(err.response?.data?.message || err.message))
+            throw err
+        }
+        finally {
+            dispatch(setLoading(false))
+        }
+    })
+
     return{
         initializeSocketConnection,
         handleSendMessage,
         handleGetChats,
-        handleOpenChat
+        handleOpenChat,
+        handleDeleteChat
     }
 })

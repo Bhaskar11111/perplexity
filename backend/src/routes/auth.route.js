@@ -12,4 +12,6 @@ router.post('/login',loginValidator,authController.loginController)
 
 router.get('/getUser',authMiddleware.authUser,authController.getUserController)
 
+router.post('/logout',authMiddleware.authUser,authController.logoutController)
+
 module.exports=router

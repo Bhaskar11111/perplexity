@@ -1,6 +1,34 @@
 require('dotenv').config()
 const jwt=require('jsonwebtoken')
 
+const blacklistedTokens=new Map()
+
+const blacklistToken=((token, expiresAt)=>
+{
+    if(token)
+    {
+        blacklistedTokens.set(token, expiresAt)
+    }
+})
+
+const isTokenBlacklisted=((token)=>
+{
+    const expiresAt=blacklistedTokens.get(token)
+
+    if(!expiresAt)
+    {
+        return false
+    }
+
+    if(expiresAt * 1000 <= Date.now())
+    {
+        blacklistedTokens.delete(token)
+        return false
+    }
+
+    return true
+})
+
 const authUser=(async(req,res,next)=>
 {
     const token=req.cookies.token
@@ -14,10 +42,21 @@ const authUser=(async(req,res,next)=>
             err:'No token'
         })
     }
+    if(isTokenBlacklisted(token))
+    {
+        res.clearCookie('token')
+        return res.status(401).json({
+            message:'Token has been logged out',
+            success:false,
+            err:'Blacklisted token'
+        })
+    }
+
     try{
         const decoded=jwt.verify(token,process.env.JWT_SECRET)
 
         req.user=decoded
+        req.token=token
 
         next()
     }
@@ -32,5 +71,6 @@ const authUser=(async(req,res,next)=>
 
 module.exports=
 {
-    authUser
+    authUser,
+    blacklistToken
 }

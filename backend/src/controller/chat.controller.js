@@ -6,14 +6,26 @@ const userModel=require('../model/user.model')
 const sendMessage=(async(req,res)=>{
     {
         const {message, chatId}=req.body
+        const image=req.file ? {
+            dataUrl:`data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`,
+            mimeType:req.file.mimetype,
+            originalName:req.file.originalname
+        } : null
+        const messageContent=message?.trim() || (image ? 'Please analyze this image.' : '')
            
+        if(!messageContent)
+        {
+            return res.status(400).json({
+                message:'Message or image is required'
+            })
+        }
         
         let chat, title;
         
         if(!chatId)
             {
                 //creates chat title
-                title=await aiService.generateTitle(message)   
+                title=await aiService.generateTitle(messageContent)   
                 
                 console.log(title)
                 
@@ -39,8 +51,9 @@ const sendMessage=(async(req,res)=>{
         
         const userMessage=await messageModel.create({
             chat:chat.id,
-            content:message,
-            role:"user"
+            content:messageContent,
+            role:"user",
+            images:image ? [image] : []
         })
 
         
@@ -49,7 +62,9 @@ const sendMessage=(async(req,res)=>{
         console.log(allMessages)
 
 
-        const result=await aiService.generateResponse(allMessages)
+        const result=image
+            ? await aiService.generateImageResponse(allMessages)
+            : await aiService.generateResponse(allMessages)
 
 
         const aiMessage=await messageModel.create({
@@ -117,16 +132,16 @@ const deleteChat=(async(req,res)=>
         user:req.user.id
     })
 
-    await messageModel.deleteMany({
-        chat:chatId
-    })
-
     if(!chat)
     {
         return res.status(404).json({
             message:'Chat not found'
         })
     }
+
+    await messageModel.deleteMany({
+        chat:chatId
+    })
 
     return res.status(200).json({
         message:'Chat deleted successfully',

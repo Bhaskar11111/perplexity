@@ -5,6 +5,7 @@ const sendEmail = require("../services/mail.service")
 const{welcomeEmailTemplate}=require('../Templates/mail.template')
 const jwt=require('jsonwebtoken')
 const { emailVerificationSuccess } = require('../Templates/success.template')
+const { blacklistToken } = require('../middleware/auth.middleware')
 
 const registerController=(async(req,res,next)=>
 {
@@ -81,7 +82,8 @@ const verifyEmailController=(async(req,res,next)=>
 
   
     const html=emailVerificationSuccess()
-       res.send(html);
+    res.send(html);
+    
     }
     catch(err)
     {
@@ -180,10 +182,22 @@ const getUserController=(async(req,res)=>
     })
 })
 
+const logoutController=(async(req,res)=>
+{
+    blacklistToken(req.token || req.cookies.token, req.user?.exp)
+    res.clearCookie('token')
+
+    return res.status(200).json({
+        message:'User logged out successfully',
+        success:true
+    })
+})
+
 module.exports=
 {
     registerController,
     verifyEmailController,
     loginController,
-    getUserController
+    getUserController,
+    logoutController
 }

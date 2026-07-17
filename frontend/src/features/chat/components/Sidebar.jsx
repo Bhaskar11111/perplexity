@@ -1,15 +1,39 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createDraftChat, setCurrentChatId } from "../chat.slice";
+import { Link, useNavigate } from "react-router";
+import useAuth from "../../auth/hooks/useAuth";
+import { useChat } from "../hooks/useChat";
+import About from "../pages/About";
 
 const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
 
-  const auth=useSelector((state)=>state.auth.user)
-  console.log(auth)
+  const [iseHovered,setIsHovered]=useState(false)
+
+  const auth=useSelector((state)=>state.auth)
 
   const [isBlock, setIsBlock] = useState(false)
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const {handleLogout}=useAuth()
+  const {handleDeleteChat}=useChat()
+  const displayName=auth?.user?.username || auth?.user?.identifier || "User"
+  const avatarText=displayName[0]?.toUpperCase() || "U"
+
+  const handleLogoutClick=(async()=>
+  {
+    try {
+      await handleLogout()
+    }
+    catch(err) {
+      console.error(err)
+    }
+    finally {
+      setIsBlock(false)
+      navigate('/login', {replace:true})
+    }
+  })
 
   const openChat=((chatId)=>
   {
@@ -18,6 +42,17 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
     }
     if (window.innerWidth < 1024) {
       setIsOpen(false)
+    }
+  })
+
+  const deleteSelectedChat=(async(e, chatId)=>
+  {
+    e.stopPropagation()
+    try {
+      await handleDeleteChat(chatId)
+    }
+    catch(err) {
+      console.error(err)
     }
   })
 
@@ -64,49 +99,61 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
 
         <div className="space-y-1">
           {sortedChats.map((elem) => (
-            <button
-              onClick={()=>{
-                if (elem.isDraft) {
-                  dispatch(setCurrentChatId(elem.id))
-                  if (window.innerWidth < 1024) {
-                    setIsOpen(false)
-                  }
-                  return
-                }
-
-                openChat(elem.id)
-              }}
+            <div
               key={elem.id}
-              className={`group cursor-pointer w-full rounded-md px-3 py-2.5 text-left transition ${
+              className={`group flex w-full items-center rounded-md px-3 py-2.5 text-left transition ${
                 elem.id === currentChatId
                   ? "bg-[#30283d] text-white"
                   : "text-white/68 hover:bg-[#2B2438]/60 hover:text-white"
               }`}
             >
-              <h4 className="truncate text-[13px] font-medium leading-5">
-                {elem.title}
-              </h4>
+              <button
+                onClick={()=>{
+                  if (elem.isDraft) {
+                    dispatch(setCurrentChatId(elem.id))
+                    if (window.innerWidth < 1024) {
+                      setIsOpen(false)
+                    }
+                    return
+                  }
 
-            </button>
+                  openChat(elem.id)
+                }}
+                className="min-w-0 flex-1 cursor-pointer text-left"
+                type="button"
+              >
+                <h4 className="truncate text-[13px] font-medium leading-5">
+                  {elem.title}
+                </h4>
+              </button>
+
+              <button
+                onClick={(e)=>deleteSelectedChat(e, elem.id)}
+                className="ml-2 grid h-7 w-7 shrink-0 place-items-center rounded-md text-white/35 opacity-100 transition hover:bg-red-500/10 hover:text-red-400 md:opacity-0 md:group-hover:opacity-100"
+                type="button"
+              >
+                <i className="ri-delete-bin-6-line text-sm"></i>
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
      
       <div className="border-t border-white/8 p-4">
-        <button className="flex w-full items-center gap-3 rounded-md p-2 text-left transition ">
+        <div className="flex w-full items-center gap-3 rounded-md p-2 text-left transition ">
 
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#7b5be6] text-md font-semibold text-white">
-            {(auth.username[1]).toUpperCase()}
+            {avatarText}
           </div>
 
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-sm font-medium text-white">
-              {auth.username}
+              {displayName}
             </h3>
 
             <p className="truncate text-xs text-white/40">
-              {auth.email}
+              {auth.user?.email}
             </p>
           </div>
 
@@ -132,8 +179,9 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
     }
   `}
 >
+  <Link to='/about'>
   <button
-    className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
+    className="group relative cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
   >
     <i className="ri-information-line text-lg text-white/60 group-hover:text-white"></i>
 
@@ -141,23 +189,34 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
       About
     </span>
   </button>
+  </Link>
 
   <div className="mx-3  h-[.1px] bg-white/10" />
 
-  <button
-    className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
+  <button onMouseEnter={()=>setIsHovered(true)}
+   onMouseLeave={()=>setIsHovered(false)} 
+    className="group/settings relative cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-white/[0.06]"
   >
     <i className="ri-settings-3-line text-lg text-white/60 group-hover:text-white"></i>
 
-    <span className="text-[15px] font-medium text-white/80 group-hover:text-white">
-      Settings
+    <span className="text-[15px]
+    font-medium
+    text-white/80
+    transition-all
+    duration-300
+    group-hover/settings:text-green-400/80
+    ">
+      {iseHovered?'Coming soon':'Settings'}
     </span>
   </button>
+  
 
   <div className="mx-3 h-[.1px] bg-white/10" />
 
   <button
+    onClick={handleLogoutClick}
     className="group cursor-pointer flex w-full items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-red-500/10"
+    type="button"
   >
     <i className="ri-logout-box-r-line text-lg text-red-400"></i>
 
@@ -168,7 +227,7 @@ const Sidebar = ({isOpen, setIsOpen, selectChat}) => {
 </div>
           </div>
 
-        </button>
+        </div>
       </div>
 
     </aside>

@@ -5,6 +5,9 @@ import PixelBlast from "../features/auth/components/Bits/ASCII";
 
 const WildCard = () => {
 
+        document.title='Etos | Oops!'
+
+
     const navigate=useNavigate()
 
   return (
@@ -15,7 +18,7 @@ const WildCard = () => {
           pixelSize={7}
           color="#702cb3"
           patternScale={2}
-          patternDensity={1.45}
+          patternDensity={1.1}
           pixelSizeJitter={0}
           enableRipples
           rippleSpeed={.7}

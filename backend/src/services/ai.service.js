@@ -1,5 +1,4 @@
 require('dotenv').config()
-const {ChatGoogleGenerativeAI}=require('@langchain/google-genai')
 const {ChatMistralAI}=require('@langchain/mistralai')
 const {HumanMessage,SystemMessage,AIMessage}=require('@langchain/core/messages')
 const {tool}=require('@langchain/core/tools')
@@ -15,6 +14,11 @@ const chatMistralModel=new ChatMistralAI({
 
 const titleMistralModel=new ChatMistralAI({
     model:'mistral-small-latest',
+    apiKey:process.env.MISTRAL_API_KEY
+})
+
+const imageMistralModel=new ChatMistralAI({
+    model:process.env.MISTRAL_IMAGE_MODEL || 'pixtral-12b',
     apiKey:process.env.MISTRAL_API_KEY
 })
 
@@ -66,6 +70,42 @@ const generateResponse=(async(allMessages)=>
     return response.messages[response.messages.length-1].content
 })
 
+const generateImageResponse=(async(allMessages)=>
+{
+    const messages=allMessages.map((elem)=>
+    {
+        if(elem.role==="user"){
+            const images=elem.images || []
+
+            if(images.length){
+                return new HumanMessage({
+                    content:[
+                        {
+                            type:"text",
+                            text:elem.content || "Please analyze this image."
+                        },
+                        ...images.map((image)=>({
+                            type:"image_url",
+                            image_url:image.dataUrl
+                        }))
+                    ]
+                })
+            }
+
+            return new HumanMessage(elem.content)
+        }
+        else if(elem.role==="ai"){
+            return new AIMessage(elem.content)
+        }
+    }).filter(Boolean)
+
+    const response=await imageMistralModel.invoke(messages)
+
+    return Array.isArray(response.content)
+        ? response.content.map((elem)=>elem.text || '').join('')
+        : response.content
+})
+
 const generateTitle=(async(message)=>
 {
     const title=await titleMistralModel.invoke([
@@ -91,5 +131,6 @@ Rules:
 
 module.exports={
     generateResponse,
+    generateImageResponse,
     generateTitle
 }

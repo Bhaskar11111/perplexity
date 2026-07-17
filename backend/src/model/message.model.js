@@ -15,7 +15,14 @@ const messageSchema=mongoose.Schema(
             type:String,
             enum:['user','ai'],
             required:[true,'role is required']
-        }
+        },
+        images:[
+            {
+                dataUrl:String,
+                mimeType:String,
+                originalName:String
+            }
+        ]
 
     },
     {

@@ -64,17 +64,17 @@ const chatSlice=createSlice({
 
         addMessage:((state,action)=>
         {
-            const {chatId,id,content,role,shouldAnimate=false,isPending=false}=action.payload
+            const {chatId,id,content,role,images=[],shouldAnimate=false,isPending=false}=action.payload
             if (!state.chats[chatId]) {
                 return
             }
-            state.chats[chatId].messages.push({id,content,role,shouldAnimate,isPending})
+            state.chats[chatId].messages.push({id,content,role,images,shouldAnimate,isPending})
             state.chats[chatId].lastUpdated = new Date().toISOString()
         }),
 
         updateMessage:((state,action)=>
         {
-            const {chatId,messageId,content,role,shouldAnimate=false,isPending=false}=action.payload
+            const {chatId,messageId,content,role,images,shouldAnimate=false,isPending=false}=action.payload
             const chat=state.chats[chatId]
             if (!chat) {
                 return
@@ -85,6 +85,9 @@ const chatSlice=createSlice({
             }
             message.content=content
             message.role=role
+            if(images) {
+                message.images=images
+            }
             message.shouldAnimate=shouldAnimate
             message.isPending=isPending
             chat.lastUpdated = new Date().toISOString()
@@ -110,6 +113,17 @@ const chatSlice=createSlice({
             state.loading=false
             state.error=null
         }),
+        removeChat:((state,action)=>
+        {
+            const chatId=action.payload
+            delete state.chats[chatId]
+
+            if(state.currentChatId === chatId)
+            {
+                const remainingChats=Object.values(state.chats).sort((a,b)=>new Date(b.lastUpdated || 0)-new Date(a.lastUpdated || 0))
+                state.currentChatId=remainingChats[0]?.id || null
+            }
+        }),
         setCurrentChatId:((state,action)=>
         {
             state.currentChatId=action.payload
@@ -125,6 +139,6 @@ const chatSlice=createSlice({
     }
 })
 
-export const {setChats,clearChats,setCurrentChatId,setLoading,setError,createDraftChat,replaceDraftChat,createNewChat,addMessage,updateMessage,addFollowMessages}=chatSlice.actions
+export const {setChats,clearChats,removeChat,setCurrentChatId,setLoading,setError,createDraftChat,replaceDraftChat,createNewChat,addMessage,updateMessage,addFollowMessages}=chatSlice.actions
 
 export default chatSlice.reducer

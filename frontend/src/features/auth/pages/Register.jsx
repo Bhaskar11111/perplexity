@@ -27,6 +27,9 @@ const fields = [
 ];
 
 const Register = () => {
+
+      document.title='Etos | Register'
+
   const {handleRegister}=useAuth()
   const {showToast}=useToast()
   const navigate=useNavigate()

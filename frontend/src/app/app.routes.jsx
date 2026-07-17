@@ -4,10 +4,16 @@ import Register from '../features/auth/pages/Register';
 import Dashboard from '../features/chat/pages/Dashboard';
 import Protected from '../features/auth/components/Protected';
 import WildCard from '../app/WildCard.jsx';
+import Landing from '../features/auth/pages/Landing'
+import About from '../features/chat/pages/About.jsx';
 
 const authRouter=createBrowserRouter([
     {
-        path:'/',
+        path:'/get-started',
+        element:<Landing/>
+    },
+    {
+        path:'/dashboard',
         element:<Protected>
             <Dashboard/>
         </Protected>
@@ -21,13 +27,17 @@ const authRouter=createBrowserRouter([
         element:<Register/>
     },
     {
-        path:'/dashboard',
-        element:<Navigate to='/' replace />
+        path:'/',
+        element:<Navigate to='/get-started' replace />
+    },
+    {
+        path:'/about',
+        element:<About/>
     },
     {
         path:'*',
         element:<WildCard/>
-    }
+    },
 ])
 
 export default authRouter;

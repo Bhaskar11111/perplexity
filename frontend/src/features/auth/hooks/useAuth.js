@@ -1,4 +1,4 @@
-import {register,login,getUser} from '../service/auth.api.js'
+import {register,login,getUser,logout} from '../service/auth.api.js'
 import { setUser,setLoading, setError } from '../auth.slice.js'
 import { useDispatch } from 'react-redux'
 import { clearChats } from '../../chat/chat.slice.js'
@@ -64,10 +64,31 @@ const handleGetUser=(async()=>
     }
 })
 
+const handleLogout=(async()=>
+{
+    try{
+        dispatch(setLoading(true))
+        const data=await logout()
+        dispatch(setUser(null))
+        dispatch(clearChats())
+        return data
+    }
+    catch(err){
+        dispatch(setUser(null))
+        dispatch(clearChats())
+        dispatch(setError(err.response?.data?.message || "Logout failed"))
+        throw err
+    }
+    finally{
+        dispatch(setLoading(false))
+    }
+})
+
     return{
         handleRegister,
         handleLogin,
-        handleGetUser
+        handleGetUser,
+        handleLogout
     }
 
 })
