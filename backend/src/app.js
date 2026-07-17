@@ -8,7 +8,7 @@ const cookieParser=require('cookie-parser')
 const morgan=require('morgan')
 
 const corsOptions={
-    origin:'https://hello-etos.onrender.com/',
+    origin:'https://hello-etos.onrender.com',
     methods:['GET','POST', 'PUT', 'DELETE'],
     optionSuccessStatus:200,
     credentials:true
