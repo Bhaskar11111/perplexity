@@ -6,7 +6,7 @@ const initSocket=((httpServer)=>
 {
     io=new Server(httpServer,{
         cors:{
-            origin:'http://localhost:5173',
+            origin:'https://hello-etos.onrender.com/',
             credentials:true,
             methods:['GET','POST','PUT','DELETE','PATCH'],
             optionSuccessStatus:true

@@ -42,7 +42,7 @@ const welcomeEmailTemplate = (username,emailVerificationToken) => `
                                 Please click the button below to verify your email.
                             </p>
 
-                            <a href='http://localhost:3000/api/auth/verify-email?token=${emailVerificationToken}'
+                            <a href='https://hello-etos.onrender.com/api/auth/verify-email?token=${emailVerificationToken}'
 
                             style=" background:#8B6CF1; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; display:inline-block; font-size:14px; font-weight:400; " > Verify Email </a>
 

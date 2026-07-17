@@ -100,7 +100,7 @@ const emailVerificationSuccess = () => `
         </p>
 
         <a
-            href="http://localhost:5173/login"
+            href="https://hello-etos.onrender.com/login"
             style="
                 display:inline-block;
                 background:#7b5be6;
