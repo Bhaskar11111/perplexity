@@ -1,5 +1,6 @@
 require('dotenv').config()
 const jwt=require('jsonwebtoken')
+const { authCookieOptions } = require('../config/cookies')
 
 const blacklistedTokens=new Map()
 
@@ -44,7 +45,7 @@ const authUser=(async(req,res,next)=>
     }
     if(isTokenBlacklisted(token))
     {
-        res.clearCookie('token')
+        res.clearCookie('token',authCookieOptions)
         return res.status(401).json({
             message:'Token has been logged out',
             success:false,

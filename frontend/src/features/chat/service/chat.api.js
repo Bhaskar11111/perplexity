@@ -1,68 +1,49 @@
 import axios from 'axios'
+import { API_BASE_URL } from '../../../config/api'
 
 const api=axios.create({
-    baseURL:'https://etos-backend-wmmj.onrender.com',
+    baseURL:API_BASE_URL,
     withCredentials:true
 })
 
 export const sendMessage=(async(message,chatId,image)=>
 {
-    try{
-        const payload=image ? new FormData() : {
-            message,
-            chatId
-        }
+    const payload=image ? new FormData() : {
+        message,
+        chatId
+    }
 
-        if(image)
+    if(image)
+    {
+        payload.append('message',message)
+        if(chatId)
         {
-            payload.append('message',message)
-            if(chatId)
-            {
-                payload.append('chatId',chatId)
-            }
-            payload.append('image',image)
+            payload.append('chatId',chatId)
         }
+        payload.append('image',image)
+    }
 
-        const response=await api.post('/api/chats/message',payload)
+    const response=await api.post('/api/chats/message',payload)
     return response.data
-    }
-    catch(err){
-        throw err
-    }
 })
 
 export const getChats=(async()=>
 {
-    try{
-        const response=await api.get('/api/chats')
-        
-        return response.data
-    }
-    catch(err){
-        throw err
-    }
+    const response=await api.get('/api/chats')
+    
+    return response.data
 })
 
 export const getMessages=(async(chatId)=>
 {
-    try{
-        const response=await api.get(`/api/chats/messages/${chatId}`)
+    const response=await api.get(`/api/chats/messages/${chatId}`)
 
-        return response.data
-    }
-    catch(err){
-        throw err
-    }
+    return response.data
 })
 
 export const deleteChat=(async(chatId)=>
 {
-    try{
-        const response=await api.delete(`/api/chats/${chatId}`)
+    const response=await api.delete(`/api/chats/${chatId}`)
 
-        return response.data
-    }
-    catch(err){
-        throw err
-    }
+    return response.data
 })

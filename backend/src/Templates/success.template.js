@@ -1,3 +1,5 @@
+const { frontendUrl } = require('../config/urls');
+
 const emailVerificationSuccess = () => `
 
 <!DOCTYPE html>
@@ -100,7 +102,7 @@ const emailVerificationSuccess = () => `
         </p>
 
         <a
-            href="https://hello-etos.onrender.com/login"
+            href="${frontendUrl}/login"
             style="
                 display:inline-block;
                 background:#7b5be6;

@@ -6,6 +6,7 @@ const{welcomeEmailTemplate}=require('../Templates/mail.template')
 const jwt=require('jsonwebtoken')
 const { emailVerificationSuccess } = require('../Templates/success.template')
 const { blacklistToken } = require('../middleware/auth.middleware')
+const { authCookieOptions } = require('../config/cookies')
 
 const registerController=(async(req,res,next)=>
 {
@@ -39,15 +40,30 @@ const registerController=(async(req,res,next)=>
         email:user.email
     },process.env.JWT_SECRET)
 
-    await sendEmail({
-        to:email,
-        subject:"Welcome to Etos by Bhaskar",
-        html:welcomeEmailTemplate(username,emailVerificationToken)
-    })
+    let emailDetails;
+    try {
+        emailDetails = await sendEmail({
+            to:email,
+            subject:"Welcome to Etos by Bhaskar",
+            html:welcomeEmailTemplate(username,emailVerificationToken)
+        })
+
+        if (!emailDetails?.accepted?.includes(email)) {
+            throw new Error('Verification email was not accepted by the mail provider')
+        }
+    } catch (err) {
+        await userModel.findByIdAndDelete(user._id)
+        return res.status(502).json({
+            message:'Unable to send verification email. Please try again later.',
+            success:false,
+            err:err.message
+        })
+    }
 
     res.status(200).json({
-        message:'User registered successfully',
+        message:'User registered successfully. Verification email accepted by mail provider.',
         success:true,
+        emailAccepted: Boolean(emailDetails?.accepted?.includes(email)),
         user:{
             id:user._id,
             email,
@@ -109,7 +125,7 @@ const loginController=(async(req,res,next)=>
 
     if(!user)
     {
-        res.clearCookie('token')
+        res.clearCookie('token',authCookieOptions)
         return res.status(400).json({
             message:'Unauthorize access',
             success:false,
@@ -121,7 +137,7 @@ const loginController=(async(req,res,next)=>
 
     if(!hash)
     {
-        res.clearCookie('token')
+        res.clearCookie('token',authCookieOptions)
         return res.status(400).json({
             message:'Invalid credentials',
             success:false,
@@ -131,7 +147,7 @@ const loginController=(async(req,res,next)=>
 
     if(!user.verified)
     {
-        res.clearCookie('token')
+        res.clearCookie('token',authCookieOptions)
         return res.status(400).json({
             message:'Email is not verified. Please verify your email first',
             success:false,
@@ -147,7 +163,7 @@ const loginController=(async(req,res,next)=>
     expiresIn:"7d"
 })
 
-    res.cookie('token',token)
+    res.cookie('token',token,authCookieOptions)
 
     return res.status(200).json({
         message:'User logged in successfully',
@@ -185,7 +201,7 @@ const getUserController=(async(req,res)=>
 const logoutController=(async(req,res)=>
 {
     blacklistToken(req.token || req.cookies.token, req.user?.exp)
-    res.clearCookie('token')
+    res.clearCookie('token',authCookieOptions)
 
     return res.status(200).json({
         message:'User logged out successfully',

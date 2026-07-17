@@ -1,12 +1,13 @@
 import {io} from 'socket.io-client'
+import { API_BASE_URL } from '../../../config/api'
 
 export const initializeSocketConnection=(()=>
 {
-    const socket=io('https://etos-backend-wmmj.onrender.com',{
+    const socket=io(API_BASE_URL,{
         withCredentials:true
     })
 
-    socket.on("connect",(socket)=>
+    socket.on("connect",()=>
     {
         console.log('Connected to Socket.io server')
     })

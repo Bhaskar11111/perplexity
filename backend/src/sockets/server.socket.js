@@ -1,4 +1,5 @@
 const {Server}=require('socket.io')
+const { allowedOrigins } = require('../config/urls')
 
 let io;
 
@@ -6,7 +7,7 @@ const initSocket=((httpServer)=>
 {
     io=new Server(httpServer,{
         cors:{
-            origin:'https://hello-etos.onrender.com',
+            origin:allowedOrigins,
             credentials:true,
             methods:['GET','POST','PUT','DELETE','PATCH'],
             optionSuccessStatus:true

@@ -6,9 +6,16 @@ const authRouter=require('./routes/auth.route')
 const chatRouter=require('./routes/chat.route')
 const cookieParser=require('cookie-parser')
 const morgan=require('morgan')
+const { allowedOrigins } = require('./config/urls')
 
 const corsOptions={
-    origin:'https://hello-etos.onrender.com',
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true)
+        }
+
+        return callback(new Error(`CORS blocked origin: ${origin}`))
+    },
     methods:['GET','POST', 'PUT', 'DELETE'],
     optionSuccessStatus:200,
     credentials:true

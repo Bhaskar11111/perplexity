@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { API_BASE_URL } from '../../../config/api'
 
 const api=axios.create({
-    baseURL:'https://etos-backend-wmmj.onrender.com',
+    baseURL:API_BASE_URL,
     withCredentials:true
 })
 
