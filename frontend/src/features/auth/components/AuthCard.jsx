@@ -54,7 +54,7 @@ const AuthCard = ({
       </div>  
 
       <div className="relative z-20 ">
-      <div className="flex min-h-screen items-center justify-center px-3 py-4 sm:px-6 sm:py-8 ">
+      <div className="flex min-h-screen items-center justify-center px-5 py-4 sm:px-6 sm:py-8 ">
 
 
 
@@ -68,7 +68,7 @@ backdrop-blur-[3px]
             <img
               src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
               alt="Dusk landscape"
-              className="absolute inset-0 h-full w-full object-cover opacity-85"
+              className="absolute  inset-0 h-full w-full object-cover opacity-85"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#6d50df]/20 via-black/10 to-[#090713]" />
 
