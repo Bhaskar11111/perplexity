@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api=axios.create({
-    baseURL:'https://etos-backend-wmmj.onrender.com/',
+    baseURL:'https://etos-backend-wmmj.onrender.com',
     withCredentials:true
 })
 
