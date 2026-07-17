@@ -56,7 +56,8 @@ const registerController=(async(req,res,next)=>
         return res.status(502).json({
             message:'Unable to send verification email. Please try again later.',
             success:false,
-            err:err.message
+            err:err.message,
+            code:err.code
         })
     }
 

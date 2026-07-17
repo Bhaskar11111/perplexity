@@ -5,6 +5,10 @@ export const getAuthErrorMessage = (err) => {
 
   const data = err.response?.data;
 
+  if (err.response?.status === 502 && data?.err) {
+    return `${data.message} (${data.err})`;
+  }
+
   if (data?.message) return data.message;
   if (data?.err) return data.err;
   if (Array.isArray(data?.error) && data.error[0]?.msg) return data.error[0].msg;
