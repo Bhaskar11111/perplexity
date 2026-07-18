@@ -154,7 +154,7 @@ const Message = ({ role, content, images = [], shouldAnimate = false, isPending 
   return (
     <div ref={messageRef} className={`flex ${isUser ? "justify-end " : "justify-start"}`}>
       {!isUser && (
-        <div className="mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#18161A]">
+        <div className="mt-2 hidden  lg:flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#18161A]">
           <p className="text-xl font-thin text-white/70">&xi;</p>
         </div>
       )}
@@ -198,7 +198,7 @@ const Message = ({ role, content, images = [], shouldAnimate = false, isPending 
       </div>
 
       {isUser && (
-        <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#7b5be6] text-md font-semibold text-white">
+        <div className="mt-1 hidden  lg:flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#7b5be6] text-md font-semibold text-white">
           {userInitial}
         </div>
       )}
