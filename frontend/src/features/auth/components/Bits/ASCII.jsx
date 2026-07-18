@@ -322,11 +322,14 @@ const PixelBlast = ({
   speed = 0.5,
   transparent = true,
   edgeFade = 0.5,
-  noiseAmount = 0
+  noiseAmount = 0,
+  dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.5),
+  frameRate = 30
 }) => {
   const containerRef = useRef(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);
+  const lastFrameTimeRef = useRef(0);
 
   const threeRef = useRef(null);
   const prevConfigRef = useRef(null);
@@ -368,7 +371,7 @@ const PixelBlast = ({
       });
       renderer.domElement.style.width = '100%';
       renderer.domElement.style.height = '100%';
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(dpr);
       container.appendChild(renderer.domElement);
       if (transparent) renderer.setClearAlpha(0);
       else renderer.setClearColor(0x000000, 1);
@@ -504,12 +507,29 @@ const PixelBlast = ({
         window.removeEventListener('pointerdown', onPointerDown);
         window.removeEventListener('pointermove', onPointerMove);
       };
+      const intersectionObserver = new IntersectionObserver(([entry]) => {
+        visibilityRef.current.visible = entry.isIntersecting;
+      });
+      intersectionObserver.observe(container);
+
+      const handleVisibilityChange = () => {
+        visibilityRef.current.visible = !document.hidden;
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
       let raf = 0;
-      const animate = () => {
+      const animate = elapsedMs => {
         if (autoPauseOffscreen && !visibilityRef.current.visible) {
           raf = requestAnimationFrame(animate);
           return;
         }
+        const minFrameTime = 1000 / Math.max(frameRate, 1);
+        if (elapsedMs - lastFrameTimeRef.current < minFrameTime) {
+          raf = requestAnimationFrame(animate);
+          return;
+        }
+
+        lastFrameTimeRef.current = elapsedMs;
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current;
         if (liquidEffect) liquidEffect.uniforms.get('uTime').value = uniforms.uTime.value;
         if (composer) {
@@ -542,7 +562,9 @@ const PixelBlast = ({
         composer,
         touch,
         liquidEffect,
-        removeInputListeners
+        removeInputListeners,
+        intersectionObserver,
+        handleVisibilityChange
       };
     } else {
       const t = threeRef.current;
@@ -573,6 +595,8 @@ const PixelBlast = ({
       if (!threeRef.current) return;
       const t = threeRef.current;
       t.removeInputListeners?.();
+      t.intersectionObserver?.disconnect();
+      document.removeEventListener('visibilitychange', t.handleVisibilityChange);
       t.resizeObserver?.disconnect();
       cancelAnimationFrame(t.raf);
       t.quad?.geometry.dispose();
@@ -603,7 +627,9 @@ const PixelBlast = ({
     autoPauseOffscreen,
     variant,
     color,
-    speed
+    speed,
+    dpr,
+    frameRate
   ]);
 
   return (

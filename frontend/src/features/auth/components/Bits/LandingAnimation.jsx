@@ -234,7 +234,8 @@ export default function FaultyTerminal({
   tint = '#ffffff',
   mouseReact = true,
   mouseStrength = 0.2,
-  dpr = Math.min(window.devicePixelRatio || 1, 2),
+  dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.5),
+  frameRate = 60,
   pageLoadAnimation = true,
   brightness = 1,
   className,
@@ -250,6 +251,8 @@ export default function FaultyTerminal({
   const rafRef = useRef(0);
   const loadAnimationStartRef = useRef(0);
   const timeOffsetRef = useRef(Math.random() * 100);
+  const lastFrameTimeRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
 
@@ -325,6 +328,13 @@ export default function FaultyTerminal({
 
     const update = t => {
       rafRef.current = requestAnimationFrame(update);
+      const minFrameTime = 1000 / Math.max(frameRate, 1);
+
+      if (!isVisibleRef.current || t - lastFrameTimeRef.current < minFrameTime) {
+        return;
+      }
+
+      lastFrameTimeRef.current = t;
 
       if (pageLoadAnimation && loadAnimationStartRef.current === 0) {
         loadAnimationStartRef.current = t;
@@ -364,8 +374,20 @@ export default function FaultyTerminal({
 
     if (mouseReact) ctn.addEventListener('mousemove', handleMouseMove);
 
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      isVisibleRef.current = entry.isIntersecting;
+    });
+    intersectionObserver.observe(ctn);
+
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       cancelAnimationFrame(rafRef.current);
+      intersectionObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       resizeObserver.disconnect();
       if (mouseReact) ctn.removeEventListener('mousemove', handleMouseMove);
       if (gl.canvas.parentElement === ctn) ctn.removeChild(gl.canvas);
@@ -390,6 +412,7 @@ export default function FaultyTerminal({
     tintVec,
     mouseReact,
     mouseStrength,
+    frameRate,
     pageLoadAnimation,
     brightness,
     handleMouseMove

@@ -1,30 +1,42 @@
+import React, { Suspense, lazy } from 'react'
 import {createBrowserRouter, Navigate} from 'react-router'
-import Login from '../features/auth/pages/Login';
-import Register from '../features/auth/pages/Register';
-import Dashboard from '../features/chat/pages/Dashboard';
 import Protected from '../features/auth/components/Protected';
 import WildCard from '../app/WildCard.jsx';
-import Landing from '../features/auth/pages/Landing'
-import About from '../features/chat/pages/About.jsx';
+
+const Landing = lazy(() => import('../features/auth/pages/Landing'))
+const Login = lazy(() => import('../features/auth/pages/Login'))
+const Register = lazy(() => import('../features/auth/pages/Register'))
+const Dashboard = lazy(() => import('../features/chat/pages/Dashboard'))
+const About = lazy(() => import('../features/chat/pages/About.jsx'))
+
+const RouteFallback = () => (
+    <div className="min-h-dvh bg-[#111] text-white" />
+)
+
+const withSuspense = (element) => (
+    <Suspense fallback={<RouteFallback />}>
+        {element}
+    </Suspense>
+)
 
 const authRouter=createBrowserRouter([
     {
         path:'/get-started',
-        element:<Landing/>
+        element:withSuspense(<Landing/>)
     },
     {
         path:'/dashboard',
-        element:<Protected>
+        element:withSuspense(<Protected>
             <Dashboard/>
-        </Protected>
+        </Protected>)
     },
     {
         path:'/login',
-        element:<Login/>
+        element:withSuspense(<Login/>)
     },
     {
         path:'/register',
-        element:<Register/>
+        element:withSuspense(<Register/>)
     },
     {
         path:'/',
@@ -32,7 +44,7 @@ const authRouter=createBrowserRouter([
     },
     {
         path:'/about',
-        element:<About/>
+        element:withSuspense(<About/>)
     },
     {
         path:'*',

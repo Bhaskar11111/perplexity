@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Link } from 'react-router'
 import { useSelector } from 'react-redux'
 import FaultyTerminal from '../components/Bits/LandingAnimation'
 
 const Landing=(()=>
 {   
-    const homeWelcomeMessages = [
+    const homeWelcomeMessages = useMemo(() => [
   <>
     What is the one thing you know is true, but you cannot{" "}
     <span className="text-violet-400/70 ">actually prove</span>?
@@ -60,9 +60,9 @@ const Landing=(()=>
     <span className="text-violet-400/70 ">atmospheric sound</span>, what would it
     sound like?
   </>,
-]
+], [])
 
-    const homeLogline=[
+    const homeLogline = useMemo(() => [
         "Thoughts, knowledge, and vision, working in perfect context.",
 "Where every conversation becomes lasting intelligence.",
 "The workspace where ideas find their next step.",
@@ -72,14 +72,16 @@ const Landing=(()=>
 "Search, reason, revisit chats, and ask about images in one focused workspace",
 "Built for minds that ask better questions.",
 "One place for every thought worth continuing."
-]
+], [])
 
-document.title='Etos | Home'
+useEffect(() => {
+    document.title='Etos | Home'
+}, [])
 
 
-    const randomWelcome=homeWelcomeMessages[(Math.floor(Math.random()*homeWelcomeMessages.length))]
+    const randomWelcome = useMemo(() => homeWelcomeMessages[(Math.floor(Math.random()*homeWelcomeMessages.length))], [homeWelcomeMessages])
 
-    const randomLogline=homeLogline[(Math.floor(Math.random()*homeLogline.length))]
+    const randomLogline = useMemo(() => homeLogline[(Math.floor(Math.random()*homeLogline.length))], [homeLogline])
 
     const user=useSelector((state)=>state.auth.user)
 
@@ -89,23 +91,26 @@ document.title='Etos | Home'
               
   <div className='w-full h-[100vh] bg-red-200 -z-10 absolute'>
   <FaultyTerminal
-    scale={1.9}
+    scale={1.3}
     gridMul={[2, 1]}
-    digitSize={1.2}
+    digitSize={1}
     timeScale={0.5}
     pause={false}
-    scanlineIntensity={0.2}
+    frameRate={120}
+    dpr={1}
+    scanlineIntensity={.2}
     glitchAmount={1}
     flickerAmount={.1}
     noiseAmp={0.7}
     chromaticAberration={0}
-    dither={0}
+    frameRate={30}
+mouseReact={false}
     curvature={0.23}
     tint="#9A7DFF"
-    mouseReact
+    
     mouseStrength={0.2}
-    pageLoadAnimation
-    brightness={0.9}
+    pageLoadAnimation={true}
+    brightness={0.65}
   />
 
 </div>

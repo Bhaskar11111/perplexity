@@ -12,8 +12,6 @@ const BrandLogo = () => (
   </span>
 );
 
-const backgroundColor = [0.5, 0.6, 0.8];
-
 const AuthCard = ({
   mode,
   title,
@@ -35,12 +33,12 @@ const AuthCard = ({
           pixelSize={7}
           color="#6a4fc9"
           patternScale={2}
-          patternDensity={1.1}
+          patternDensity={.9}
           pixelSizeJitter={0}
           enableRipples
           rippleSpeed={.7}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
+          rippleThickness={.12}
+          rippleIntensityScale={1}
           liquidStrength={0.12}
           liquid
           liquidRadius={1.2}
@@ -48,6 +46,8 @@ const AuthCard = ({
           speed={0.3}
           edgeFade={0}
           transparent
+          dpr={1}
+          frameRate={120}
           className="h-dvh w-dvw"
           style={{ width: "100dvw", height: "100dvh" }}
         />
