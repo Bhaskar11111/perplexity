@@ -163,7 +163,7 @@ const Message = ({ role, content, images = [], shouldAnimate = false, isPending 
         className={` ${
           isUser
             ? "mr-3 bg-[#30283d]/30 max-w-[65vw] px-5 lg:max-w-[30vw]"
-            : "ml-1 max-w-[80vw]"
+            : "ml-1 max-w-[85vw]"
         } min-w-0 overflow-hidden flex items-start justify-center ${
           isLongMessage ? "rounded-xl px-5 py-4" : "rounded-full px-4 py-2"
         }`}
