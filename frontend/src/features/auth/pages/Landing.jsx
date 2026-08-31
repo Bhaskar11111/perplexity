@@ -1,0 +1,180 @@
+import React, { useEffect, useMemo } from 'react'
+import { Link } from 'react-router'
+import { useSelector } from 'react-redux'
+import FaultyTerminal from '../components/Bits/LandingAnimation'
+
+const Landing=(()=>
+{   
+    const homeWelcomeMessages = useMemo(() => [
+  <>
+    What is the one thing you know is true, but you cannot{" "}
+    <span className="text-violet-400/70 ">actually prove</span>?
+  </>,
+
+  <>
+    If your <span className="text-violet-400/70 ">mind</span> had a physical{" "}
+    <span className="text-violet-400/70 ">shape</span>, what would it look like
+    right now?
+  </>,
+
+  <>
+    What <span className="text-violet-400/70 ">question</span> are you most afraid
+    of knowing the <span className="text-violet-400/70 ">absolute answer</span> to?
+  </>,
+
+  <>
+    If you could <span className="text-violet-400/70 ">unlearn</span> one single
+    fact, what would you choose to <span className="text-violet-400/70 ">forget</span>?
+  </>,
+
+  <>
+    What is a <span className="text-violet-400/70 ">concept</span> or idea that
+    your brain completely refuses to <span className="text-violet-400/70 ">grasp</span>?
+  </>,
+
+  <>
+    If you could see a <span className="text-violet-400/70 ">hidden metric</span>{" "}
+    floating above people's heads, what would it{" "}
+    <span className="text-violet-400/70 ">measure</span>?
+  </>,
+
+  <>
+    What part of <span className="text-violet-400/70 ">human behavior</span> makes
+    the least amount of <span className="text-violet-400/70 ">sense</span> to you?
+  </>,
+
+  <>
+    If you had to explain the feeling of{" "}
+    <span className="text-violet-400/70 ">nostalgia</span> to an{" "}
+    <span className="text-violet-400/70 ">alien</span>, what words would you use?
+  </>,
+
+  <>
+    What is something you completely took for{" "}
+    <span className="text-violet-400/70 ">granted</span> until it suddenly{" "}
+    <span className="text-violet-400/70 ">vanished</span>?
+  </>,
+
+  <>
+    If your current <span className="text-violet-400/70 ">mood</span> was an{" "}
+    <span className="text-violet-400/70 ">atmospheric sound</span>, what would it
+    sound like?
+  </>,
+], [])
+
+    const homeLogline = useMemo(() => [
+        "Thoughts, knowledge, and vision, working in perfect context.",
+"Where every conversation becomes lasting intelligence.",
+"The workspace where ideas find their next step.",
+"Think beyond ordinary.",
+"Context is your superpower.",
+"Every answer begins with understanding.",
+"Search, reason, revisit chats, and ask about images in one focused workspace",
+"Built for minds that ask better questions.",
+"One place for every thought worth continuing."
+], [])
+
+useEffect(() => {
+    document.title='Etos | Home'
+}, [])
+
+
+    const randomWelcome = useMemo(() => homeWelcomeMessages[(Math.floor(Math.random()*homeWelcomeMessages.length))], [homeWelcomeMessages])
+
+    const randomLogline = useMemo(() => homeLogline[(Math.floor(Math.random()*homeLogline.length))], [homeLogline])
+
+    const user=useSelector((state)=>state.auth.user)
+
+    return(
+        
+        <main className="home-page  min-h-screen relative overflow-hidden z-99 font-thin bg-[#111] text-white">
+              
+  <div className='w-full h-[100vh] bg-red-200 -z-10 absolute'>
+  <FaultyTerminal
+    scale={1.3}
+    gridMul={[2, 1]}
+    digitSize={1}
+    timeScale={0.5}
+    pause={false}
+    frameRate={120}
+    dpr={1}
+    scanlineIntensity={.2}
+    glitchAmount={1}
+    flickerAmount={.1}
+    noiseAmp={0.7}
+    chromaticAberration={0}
+    frameRate={30}
+mouseReact={false}
+    curvature={0.23}
+    tint="#9A7DFF"
+    
+    mouseStrength={0.2}
+    pageLoadAnimation={true}
+    brightness={0.65}
+  />
+
+</div>
+            
+            <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
+                <Link to="/get-started" className="flex items-center">
+                    <span className="grid h-8 w-8 place-items-center text-3xl font-thin rotate-3">&xi;</span>
+                    <span className="text-xl font-thin tracking-[0]">Etos</span>
+                </Link>
+
+                <nav className="flex overflow-hidden backdrop-blur-md
+bg-white/[0.03]
+border border-white/[0.05]
+rounded-full items-center gap-1">
+                    <Link
+                        to="/login"
+                        className="rounded-md px-4 py-2 text-sm  text-white/56 transition hover:bg-white/10 hover:text-white"
+                    >
+                        Login
+                    </Link>
+                    <Link
+                        to={user ? "/dashboard" : "/register"}
+                        className="rounded-md px-4 py-2 text-sm  text-white/82 transition hover:bg-white/10 hover:text-white"
+                    >
+                        {user ? "Open app" : "Create account"}
+                    </Link>
+                </nav>
+            </header>
+
+            <section className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-3xl flex-col items-center justify-center px-5 text-center">
+                {/* <div className="mb-8 flex items-center justify-center">
+                    <span className="grid h-14 w-14 place-items-center rounded-xl border border-white/10 bg-[#18161A] text-5xl font-thin text-white/88 ">&xi;</span>
+                </div> */}
+
+                <h1 className="text-4xl font-thin leading-tight max-w-5xl mx-auto tracking-[0] uppercase text-white/80 sm:text-5xl md:text-6xl">
+                {(randomWelcome)}
+                </h1>
+
+                <p className="mt-5 max-w-xl text-[16px] leading-7 text-white/58">
+                    {(randomLogline)}
+                </p>
+
+                <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+                    <Link
+                        to={user ? "/dashboard" : "/register"}
+                        className="flex h-12 flex-1 items-center justify-center rounded-xl bg-[#7b5be6] py-2 px-5 text-sm  text-white transition hover:bg-[#8b6cf1]"
+                    >
+                        {user ? "Continue" : "Create account"}
+                    </Link>
+
+                    <Link
+                        to="/login"
+                        className="flex h-12 flex-1 items-center justify-center rounded-xl border backdrop-blur-[5px] border-white/10 px-5 py-2 text-sm  text-white/68 transition hover:border-white/18 hover:bg-white/10 hover:text-white"
+                    >
+                        Login
+                    </Link>
+                </div>
+            </section>
+
+            <footer className="mx-auto flex h-16 w-full max-w-6xl items-center justify-center px-5 text-xs text-white/28 sm:px-8">
+                Etos by Bhaskar
+            </footer>
+        </main>
+    )
+})
+
+export default Landing;
